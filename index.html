@@ -71,6 +71,251 @@
       <div class="outer">
         <section id="main">
   
+    <article id="post-Java基础 - IO流" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  <div class="article-meta">
+    <a href="/2022/03/23/Java%E5%9F%BA%E7%A1%80%20-%20IO%E6%B5%81/" class="article-date">
+  <time class="dt-published" datetime="2022-03-23T14:47:32.849Z" itemprop="datePublished">2022-03-23</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+    <div class="e-content article-entry" itemprop="articleBody">
+      
+        <blockquote>
+<p>I&#x2F;O技术用于处理设备之间的数据传输,如读&#x2F;写文件，网络通信等。而“流（stream）”则是Java程序中对于数据的操作的处理方式。</p>
+</blockquote>
+<h1 id="流的分类"><a href="#流的分类" class="headerlink" title="流的分类"></a>流的分类</h1><blockquote>
+<p>按操作数据单位不同分为：字节(byte)流，字符(char)流</p>
+<p>按数据流的流向不同分为：输入流(InputStream)，输出流(OutputStream)</p>
+<p>按流的角色的不同分为：节点流，处理流</p>
+</blockquote>
+<br/>
+
+<h2 id="字节流"><a href="#字节流" class="headerlink" title="字节流"></a>字节流</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">字节（Byte）是计算机操作数据的最小单位，在Java中由8位bit组成，取值为（-128 ~ 127)。字节流操作byte类型的数据，主要操作类是OutputStream、InputStream的子类；不用缓冲区，直接对文件本身操作。</span><br></pre></td></tr></table></figure>
+
+<h2 id="字符流"><a href="#字符流" class="headerlink" title="字符流"></a>字符流</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">字符（char）是用户的可读写的最小单位，在Java中由16位bit组成，取值为（0~65535）。字符流操作char类型数据，主要操作类是Reader、Writer的子类；使用缓冲区缓冲字符，不关闭流就不会输出任何内容。</span><br></pre></td></tr></table></figure>
+
+<br/>
+
+<blockquote>
+<p><em>字节流与字符流之间可以相互转换，只需要用两个类：</em></p>
+<ul>
+<li>*OutputStreamWriter ：字符流转字节流</li>
+<li><em>InputStreamReader ：   字节流转字符流</em></li>
+</ul>
+</blockquote>
+<h2 id="输入流、输出流"><a href="#输入流、输出流" class="headerlink" title="输入流、输出流"></a>输入流、输出流</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">把对象读入到存储介质中，即为输入。从存储介质中向外读数据，即为输出。</span><br></pre></td></tr></table></figure>
+
+<br/>
+
+<h2 id="节点流-文件流"><a href="#节点流-文件流" class="headerlink" title="节点流(文件流)"></a>节点流(文件流)</h2><blockquote>
+<p>节点流，即直接从数据源或目的地读写数据</p>
+</blockquote>
+<ul>
+<li>在写入一个文件时，如果使用构造器FileOutputStream(file)，则目录下有同名文<br>件将被覆盖。</li>
+<li>如果使用构造器FileOutputStream(file,true)，则目录下的同名文件不会被覆盖，<br>在文件内容末尾追加内容。</li>
+<li>在读取文件时，必须保证该文件已存在，否则报异常。</li>
+<li>字节流操作字节，比如：.mp3，.avi，.rmvb，mp4，.jpg，.doc，.ppt</li>
+<li>字符流操作字符，只能操作普通文本文件。最常见的文本文件：.txt，.java，.c，.cpp 等语言的源代码。</li>
+</ul>
+<br/>
+
+<h2 id="处理流"><a href="#处理流" class="headerlink" title="处理流"></a>处理流</h2><blockquote>
+<p>处理流：不直接连接到数据源或目的地，而是“连接”在已存在的流（节点流或处理流）之上，通过对数据的处理为程序提供更为强大的读写功能。</p>
+<p>可分为六种：缓冲流、转换流、标准输入，输出流、打印流、数据流对象流</p>
+</blockquote>
+<h3 id="缓冲流"><a href="#缓冲流" class="headerlink" title="缓冲流"></a>缓冲流</h3><ul>
+<li>为了提高数据读写的速度，Java API提供了带缓冲功能的流类，在使用这些流类时，会创建一个内部缓冲区数组，缺省使用8192个字节(8Kb)的缓冲区</li>
+<li>缓冲流要“套接”在相应的节点流之上，根据数据操作单位可以把缓冲流分为：BufferedInputStream 和 BufferedOutput，StreamBufferedReader 和 BufferedWriter</li>
+<li>当读取数据时，数据按块读入缓冲区，其后的读操作则直接访问缓冲区</li>
+<li>当使用BufferedInputStream读取字节文件时，BufferedInputStream会一次性从文件中读取8192个(8Kb)，存在缓冲区中，直到缓冲区装满了，才重新从文件中读取下一个8192个字节数组。</li>
+<li>向流中写入字节时，不会直接写到文件，先写到缓冲区中直到缓冲区写满，<br>BufferedOutputStream才会把缓冲区中的数据一次性写到文件里。使用方法<br>flush()可以强制将缓冲区的内容全部写入输出流</li>
+<li>关闭流的顺序和打开流的顺序相反。只要关闭最外层流即可，关闭最外层流也<br>会相应关闭内层节点流</li>
+<li>如果是带缓冲区的流对象的close()方法，不但会关闭流，还会在关闭流之前刷<br>新缓冲区，关闭后不能再写出</li>
+</ul>
+<h3 id="转换流"><a href="#转换流" class="headerlink" title="转换流"></a>转换流</h3><ul>
+<li>Java API提供了两个转换流：</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">InputStreamReader：将InputStream转换为Reader</span><br><span class="line">OutputStreamWriter：将Writer转换为OutputStream</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>字节流中的数据都是字符时，转成字符流操作更高效。<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">InputStreamReader</span><br><span class="line">  实现将字节的输入流按指定字符集转换为字符的输入流。</span><br><span class="line">  需要和InputStream“套接”。</span><br><span class="line">  构造器:</span><br><span class="line">  public InputStreamReader(InputStream in)</span><br><span class="line">  public InputSreamReader(InputStream in,String charsetName)</span><br><span class="line">  如： Reader isr = new InputStreamReader(System.in,”gbk”);</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">OutputStreamWriter</span><br><span class="line"> 实现将字符的输出流按指定字符集转换为字节的输出流。</span><br><span class="line"> 需要和OutputStream“套接”。</span><br><span class="line"> 构造器:</span><br><span class="line"> public OutputStreamWriter(OutputStream out)</span><br><span class="line"> public OutputSreamWriter(OutputStream out,String charsetName</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<br/></li>
+</ul>
+<br/>
+
+<ul>
+<li><strong>转换流的编码应用</strong></li>
+</ul>
+<p><em>可以将字符按指定编码格式存储<br>可以对文本数据按指定编码格式来解读<br>指定编码表的动作由构造器完成</em></p>
+<h2 id="NIO"><a href="#NIO" class="headerlink" title="NIO"></a>NIO</h2><blockquote>
+<p>Java NIO (New IO，Non-Blocking IO)是从Java 1.4版本开始引入的一套新的IO API，可以替代标准的Java IO API。NIO与原来的IO有同样的作用和目的，但是使用的方式完全不同，NIO支持面向缓冲区的(IO是面向流的)、基于通道的IO操作。NIO将以更加高效的方式进行文件的读写操作。Java API中提供了两套NIO，一套是针对标准输入输出NIO，另一套就是网络编程NIO。</p>
+</blockquote>
+<ul>
+<li>早期的Java只提供了一个File类来访问文件系统，但File类的功能比较有限，所<br>提供的方法性能也不高。而且，大多数方法在出错时仅返回失败，并不会提供异<br>常信息。</li>
+<li>NIO. 2为了弥补这种不足，引入了Path接口，代表一个平台无关的平台路径，描<br>述了目录结构中文件的位置。Path可以看成是File类的升级版本，实际引用的资<br>源也可以不存在。</li>
+<li>在以前IO操作都是这样写的:</li>
+</ul>
+<p><em>import java.io.File;<br>File file &#x3D; new File(“index.html”);</em><br>但在Java7 中，我们可以这样写：<br><em>import java.nio.file.Path;<br>import java.nio.file.Paths;<br>Path path &#x3D; Paths.get(“index.html”);</em></p>
+<ul>
+<li>Paths 类提供的静态 get() 方法用来获取 Path 对象：</li>
+</ul>
+<p>*static Path get(String first, String … more) *: 用于将多个字符串串连成路径<br><em>static Path get(URI uri):</em>                                   返回指定uri对应的Path路径</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://example.com/2022/03/23/Java%E5%9F%BA%E7%A1%80%20-%20IO%E6%B5%81/" data-id="cl13ojqt2000004u73k5951hj" data-title="" class="article-share-link">Share</a>
+      
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+
+  
+    <article id="post-Java基础 - 栈" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  <div class="article-meta">
+    <a href="/2022/03/23/Java%E5%9F%BA%E7%A1%80%20-%20%E6%A0%88/" class="article-date">
+  <time class="dt-published" datetime="2022-03-23T14:47:32.846Z" itemprop="datePublished">2022-03-23</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+    <div class="e-content article-entry" itemprop="articleBody">
+      
+        <h1 id="栈"><a href="#栈" class="headerlink" title="栈"></a><strong>栈</strong></h1><blockquote>
+<p>栈 (stack)又称堆栈，只允许在表的一端进行加入数据（push）和移除数据（pop）。因而按照 后进先出（LIFO, Last In First Out） 的原理运作。通常称能够进行插入、删除运算的一端为&#x3D;&#x3D;栈顶&#x3D;&#x3D;（Top），另一端称为&#x3D;&#x3D;栈底&#x3D;&#x3D;（Bottom）。当表中没有元素的时候称为空栈。</p>
+</blockquote>
+<p><code>空栈时最先插入的元素总被放在栈的底部，只有所有元素被移除（弹出）后，它才能被删除</code></p>
+<p><code>栈的存储结构有顺序存储结构和链式存储结构两种。在顺序栈中，可以考虑栈的上溢；在链式栈中，不必考虑栈的上溢，只需要考虑栈的下溢</code></p>
+<p>栈的上溢是一种出错状态，应该设法避免；而下溢则是正常现象，可作为程序控制转移的条件</p>
+<h2 id="顺序栈"><a href="#顺序栈" class="headerlink" title="顺序栈"></a>顺序栈</h2><p><strong>顺序栈</strong> 常用一维数组来实现</p>
+<p>Java代码实现: </p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">MyStack</span> &#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="type">int</span>[] storage;<span class="comment">//存放栈中元素的数组</span></span><br><span class="line">    <span class="keyword">private</span> <span class="type">int</span> capacity;<span class="comment">//栈的容量</span></span><br><span class="line">    <span class="keyword">private</span> <span class="type">int</span> count;<span class="comment">//栈中元素数量</span></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="type">int</span> <span class="variable">GROW_FACTOR</span> <span class="operator">=</span> <span class="number">2</span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//不带初始容量的构造方法。默认容量为8</span></span><br><span class="line">    <span class="keyword">public</span> <span class="title function_">MyStack</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="built_in">this</span>.capacity = <span class="number">8</span>;</span><br><span class="line">        <span class="built_in">this</span>.storage=<span class="keyword">new</span> <span class="title class_">int</span>[<span class="number">8</span>];</span><br><span class="line">        <span class="built_in">this</span>.count = <span class="number">0</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//带初始容量的构造方法</span></span><br><span class="line">    <span class="keyword">public</span> <span class="title function_">MyStack</span><span class="params">(<span class="type">int</span> initialCapacity)</span> &#123;</span><br><span class="line">        <span class="keyword">if</span> (initialCapacity &lt; <span class="number">1</span>)</span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> <span class="title class_">IllegalArgumentException</span>(<span class="string">&quot;Capacity too small.&quot;</span>);</span><br><span class="line"></span><br><span class="line">        <span class="built_in">this</span>.capacity = initialCapacity;</span><br><span class="line">        <span class="built_in">this</span>.storage = <span class="keyword">new</span> <span class="title class_">int</span>[initialCapacity];</span><br><span class="line">        <span class="built_in">this</span>.count = <span class="number">0</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<br/>
+
+<h2 id="链式栈"><a href="#链式栈" class="headerlink" title="链式栈"></a>链式栈</h2><p><strong>链式栈</strong> 常用链表来实现</p>
+<p>Java代码实现:</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">LinkedList</span>&lt;E&gt; &#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">class</span> <span class="title class_">Node</span>&#123;</span><br><span class="line">        <span class="keyword">public</span> E e;</span><br><span class="line">        <span class="keyword">public</span> Node next;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">public</span> <span class="title function_">Node</span><span class="params">(E e, Node next)</span>&#123;</span><br><span class="line">            <span class="built_in">this</span>.e = e;</span><br><span class="line">            <span class="built_in">this</span>.next = next;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">public</span> <span class="title function_">Node</span><span class="params">(E e)</span>&#123;</span><br><span class="line">            <span class="built_in">this</span>(e, <span class="literal">null</span>);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">public</span> <span class="title function_">Node</span><span class="params">()</span>&#123;</span><br><span class="line">            <span class="built_in">this</span>(<span class="literal">null</span>, <span class="literal">null</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+
+<br/>
+
+<h2 id="常见应用场景"><a href="#常见应用场景" class="headerlink" title="常见应用场景"></a>常见应用场景</h2><h3 id="浏览器的回退和前进"><a href="#浏览器的回退和前进" class="headerlink" title="浏览器的回退和前进"></a>浏览器的回退和前进</h3><pre><code>    我们只需要使用两个栈(Stack1 和 Stack2)和就能实现这个功能。比如你按顺序查看了 1,2,3,4 这四个页面，我们依次把 1,2,3,4 这四个页面压入 Stack1 中。当你想回头看 2 这个页面的时候，你点击回退按钮，我们依次把 4,3 这两个页面从 Stack1 弹出，然后压入 Stack2 中。假如你又想回到页面 3，你点击前进按钮，我们将 3 页面从 Stack2 弹出，然后压入到 Stack1 中。
+</code></pre>
+<br/>
+
+<h3 id="反转字符"><a href="#反转字符" class="headerlink" title="反转字符"></a>反转字符</h3><pre><code>    利用栈后进先出的特征，将栈中的每个字符先入栈，再出栈即可。
+</code></pre>
+<br/>
+
+<h3 id="分隔符匹配"><a href="#分隔符匹配" class="headerlink" title="分隔符匹配"></a>分隔符匹配</h3><pre><code>    栈通常用于解析某种类型的文本串。通常，文本串是用计算机语言写的代码行，而解析它们的程序就是编译器。
+
+    分隔符匹配程序从字符串不断地读取字符，若它是左分隔符，则压入栈中。当从输入中读取到一个右分隔符时，弹出栈顶的左分隔符，并查看它和右分隔符是否匹配。如果栈中没有匹配的左右分隔符，或栈中一直存在着没有被匹配的分隔符（所有字符读入后，栈中仍有分隔符），则程序报错。
+
+Java中的代码实现：
+</code></pre>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">BracketChecker</span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;</span><br><span class="line">        String s ;</span><br><span class="line">        s = getString();</span><br><span class="line">        <span class="type">BracketChecker</span> <span class="variable">bracketChecker</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">BracketChecker</span>(s);</span><br><span class="line">        bracketChecker.check();</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">private</span> String input;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="title function_">BracketChecker</span><span class="params">(String input)</span> &#123;</span><br><span class="line">        <span class="built_in">this</span>.input = input;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">check</span><span class="params">()</span> &#123;</span><br><span class="line">        Stack&lt;Character&gt; stack = <span class="keyword">new</span> <span class="title class_">Stack</span>&lt;&gt;();</span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">0</span>; i &lt; input.toCharArray().length; i++) &#123;</span><br><span class="line">            <span class="type">char</span> <span class="variable">ch</span> <span class="operator">=</span> input.charAt(i);</span><br><span class="line">            <span class="keyword">switch</span> (ch) &#123;</span><br><span class="line">                <span class="keyword">case</span> <span class="string">&#x27;&#123;&#x27;</span>:</span><br><span class="line">                <span class="keyword">case</span> <span class="string">&#x27;[&#x27;</span>:</span><br><span class="line">                <span class="keyword">case</span> <span class="string">&#x27;(&#x27;</span>:</span><br><span class="line">                    stack.push(ch);</span><br><span class="line">                    <span class="keyword">break</span>;</span><br><span class="line">                <span class="keyword">case</span> <span class="string">&#x27;&#125;&#x27;</span>:</span><br><span class="line">                <span class="keyword">case</span> <span class="string">&#x27;]&#x27;</span>:</span><br><span class="line">                <span class="keyword">case</span> <span class="string">&#x27;)&#x27;</span>:</span><br><span class="line">                    <span class="keyword">if</span> (!stack.isEmpty()) &#123;</span><br><span class="line">                        <span class="type">char</span> <span class="variable">chx</span> <span class="operator">=</span> stack.pop();</span><br><span class="line">                        <span class="keyword">if</span> ((ch == <span class="string">&#x27;&#125;&#x27;</span> &amp;&amp; chx != <span class="string">&#x27;&#123;&#x27;</span>) ||</span><br><span class="line">                                (ch == <span class="string">&#x27;]&#x27;</span> &amp;&amp; chx != <span class="string">&#x27;[&#x27;</span>) ||</span><br><span class="line">                                (ch == <span class="string">&#x27;)&#x27;</span> &amp;&amp; chx != <span class="string">&#x27;(&#x27;</span>)) &#123;</span><br><span class="line">                            System.out.println(<span class="string">&quot;解析异常：&quot;</span> + ch + <span class="string">&quot;在位置&quot;</span> +i);</span><br><span class="line">                        &#125;</span><br><span class="line">                    &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">                        System.out.println(<span class="string">&quot;解析异常：&quot;</span> + ch + <span class="string">&quot;在位置&quot;</span> +i);</span><br><span class="line">                    &#125;</span><br><span class="line">                    <span class="keyword">break</span>;</span><br><span class="line">                <span class="keyword">default</span>:</span><br><span class="line">                    <span class="keyword">break</span>;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span> (!stack.isEmpty())&#123;</span><br><span class="line">            System.out.println(<span class="string">&quot;字符串异常，遗失右分隔符&quot;</span>);</span><br><span class="line">        &#125;</span><br><span class="line">        System.out.println(<span class="string">&quot;解析正确&quot;</span>);</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://example.com/2022/03/23/Java%E5%9F%BA%E7%A1%80%20-%20%E6%A0%88/" data-id="cl13ojqta000204u7760a0o7e" data-title="" class="article-share-link">Share</a>
+      
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+
+  
+    <article id="post-Java基础 - 链表" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  <div class="article-meta">
+    <a href="/2022/03/23/Java%E5%9F%BA%E7%A1%80%20-%20%E9%93%BE%E8%A1%A8/" class="article-date">
+  <time class="dt-published" datetime="2022-03-23T14:47:32.844Z" itemprop="datePublished">2022-03-23</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+    <div class="e-content article-entry" itemprop="articleBody">
+      
+        <h1 id="链表-LinkList"><a href="#链表-LinkList" class="headerlink" title="链表(LinkList)"></a>链表(LinkList)</h1><blockquote>
+<p>链表是一种线性表，但并<strong>不按线性的顺序</strong>存储数据，使用的也不是<strong>连续的内存空间</strong>来存储数据。</p>
+</blockquote>
+<blockquote>
+<p>链表的插入和删除操作的复杂度为 O(1) ，只需要知道目标位置元素的上一个元素即可。但是，在查找一个节点或者访问特定位置的节点的时候复杂度为 O(n) 。 </p>
+</blockquote>
+<blockquote>
+<p>使用链表结构可以克服数组需要预先知道数据大小的缺点，链表结构可以<strong>充分利用计算机内存空间</strong>,实现灵活的<strong>内存动态管理</strong>。但链表不会节省空间，相比于数组会<strong>占用更多的空间</strong>，因为链表中每个节点存放的还有指向其他节点的指针。除此之外，链表不具有数组随机读取的优点。</p>
+</blockquote>
+<p>相对于数组，链表的优点： </p>
+<ul>
+<li>可灵活地分配内存空间，内存利用率高。链表是一种动态数据结构，可以在运行时通过分配和取消分配内存来增长和缩小。</li>
+<li>能在 O(1) 时间内删除或者添加元素，前提是该元素的前一个元素已知，当然也取决于是单链表还是双链表，在双链表中，如果已知该元素的后一个元素，同样可以在 O(1) 时间内删除或者添加该元素。</li>
+<li>易插入和删除元素。在链表中进行插入和删除节点很容易。只需要更新节点下一个指针中的地址。</li>
+</ul>
+<p>缺点：</p>
+<ul>
+<li><p>每次读取元素，都需要从链表头开始一个一个地读取，效率太低。</p>
+</li>
+<li><p>查询第n个元素需要O（k）时间，时间复杂度高。</p>
+</li>
+</ul>
+<br/>
+
+<h2 id="链表的分类"><a href="#链表的分类" class="headerlink" title="链表的分类"></a>链表的分类</h2><h3 id="1-单链表"><a href="#1-单链表" class="headerlink" title="1.单链表"></a>1.单链表</h3><pre><code>     &lt;u&gt;**单向链表**&lt;/u&gt; 只有一个方向，结点只有一个后继指针 next 指向后面的节点。因此，链表这种数据结构通常在物理内存上是不连续的。我们习惯性地把第一个结点叫作头结点，链表通常有一个不保存任何值的 head 节点(头结点)，通过头结点我们可以遍历整个链表。尾结点通常指向 null。
+
+    Java中单链表的创建：
+</code></pre>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> linklist;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Node</span> &#123;</span><br><span class="line">    <span class="type">Node</span> <span class="variable">next</span> <span class="operator">=</span><span class="literal">null</span>;</span><br><span class="line">    <span class="type">int</span> data;</span><br><span class="line">    <span class="keyword">public</span> <span class="title function_">Node</span><span class="params">(<span class="type">int</span> data)</span> &#123;</span><br><span class="line">        <span class="built_in">this</span>.data=data;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<br/>
+
+<h3 id="2-双向链表"><a href="#2-双向链表" class="headerlink" title="2.双向链表"></a>2.双向链表</h3><p><u><strong>双向链表</strong></u> 包含两个指针，一个 prev 指向前一个节点，一个 next 指向后一个节点。</p>
+<pre><code>Java中双向链表的创建：
+</code></pre>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Node</span> &#123;</span><br><span class="line">    Node next; </span><br><span class="line"> <span class="comment">//存放下一个元素的引用地址，尾结点的通常为null。</span></span><br><span class="line">    Node prev;             </span><br><span class="line"> <span class="comment">//存放上一个元素的引用地址，头结点的通常为null。若</span></span><br><span class="line"> <span class="comment">//若尾结点的next值指向头结点，则为双向循环链表，且头结点的prev指向尾结点，则为双向循环链表</span></span><br><span class="line">    Object element;</span><br><span class="line">  </span><br><span class="line">    <span class="keyword">public</span> <span class="title function_">Node</span><span class="params">(Node next, Node prev, Object element)</span> &#123;</span><br><span class="line">        <span class="built_in">super</span>();</span><br><span class="line">        <span class="built_in">this</span>.next = next;</span><br><span class="line">        <span class="built_in">this</span>.prev = prev;</span><br><span class="line">        <span class="built_in">this</span>.element = element;</span><br><span class="line">     &#125;</span><br><span class="line"> </span><br><span class="line">    <span class="keyword">public</span> <span class="title function_">Node</span><span class="params">(Node node)</span> &#123;</span><br><span class="line">        <span class="built_in">this</span>.element = node;</span><br><span class="line">        node.next = <span class="literal">null</span>;</span><br><span class="line">        node.prev = <span class="literal">null</span>;</span><br><span class="line">    &#125;</span><br><span class="line">  </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="3-循环链表"><a href="#3-循环链表" class="headerlink" title="3.循环链表"></a>3.循环链表</h3><p><u>**循环链表 **</u>其实是一种特殊的单链表，和单链表不同的是循环链表的尾结点不是指向 null，而是指向链表的头结点。</p>
+<p>代码的实现上与单链表类似，只是尾结点不再为null，而是指向头结点</p>
+<br/>
+
+<h3 id="4-双向循环链表"><a href="#4-双向循环链表" class="headerlink" title="4.双向循环链表"></a>4.双向循环链表</h3><p><u><strong>双向循环链表</strong></u> 最后一个节点的 next 指向 head，而 head 的 prev 指向最后一个节点，构成一个环。</p>
+<p>代码的实现上与双向链表类似，但是尾结点的next值指向头结点，头结点的prev指向尾结点。</p>
+<br/>
+
+<h3 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h3><p>链表适用于需要存储的数据元素的个数不确定，并且需要经常添加和删除数据的时候。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://example.com/2022/03/23/Java%E5%9F%BA%E7%A1%80%20-%20%E9%93%BE%E8%A1%A8/" data-id="cl13ojqt8000104u70yhw12n3" data-title="" class="article-share-link">Share</a>
+      
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+
+  
     <article id="post-Java基础-栈" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
   <div class="article-meta">
     <a href="/2022/03/23/Java%E5%9F%BA%E7%A1%80-%E6%A0%88/" class="article-date">
@@ -171,6 +416,18 @@ Java中的代码实现：
     <h3 class="widget-title">Recent Posts</h3>
     <div class="widget">
       <ul>
+        
+          <li>
+            <a href="/2022/03/23/Java%E5%9F%BA%E7%A1%80%20-%20IO%E6%B5%81/">(no title)</a>
+          </li>
+        
+          <li>
+            <a href="/2022/03/23/Java%E5%9F%BA%E7%A1%80%20-%20%E6%A0%88/">(no title)</a>
+          </li>
+        
+          <li>
+            <a href="/2022/03/23/Java%E5%9F%BA%E7%A1%80%20-%20%E9%93%BE%E8%A1%A8/">(no title)</a>
+          </li>
         
           <li>
             <a href="/2022/03/23/Java%E5%9F%BA%E7%A1%80-%E6%A0%88/">Java基础 - 栈</a>
