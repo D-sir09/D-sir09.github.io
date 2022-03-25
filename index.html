@@ -93,7 +93,49 @@
     
     <div class="e-content article-entry" itemprop="articleBody">
       
-        
+        <p><strong><u>队列</u></strong> 是 先进先出( FIFO，First In, First Out) 的线性表。在具体应用中通常用链表或者数组来实现，用数组实现的队列叫作 <strong>顺序队列</strong> ，用链表实现的队列叫作 <strong>链式队列</strong> 。</p>
+<ul>
+<li><p><strong>队列的操作在两端进行，即 在后端（rear）进行插入操作也就是 入队 enqueue，在前端（front）进行删除操作也就是出队 dequeue</strong></p>
+</li>
+<li><p>在队列中，删除的数据还保留着内存中，但头指针已不再指向它</p>
+</li>
+<li><p>队列和栈一样，存在上溢和下溢。此外，还存在”<strong>假溢出</strong>“现象</p>
+</li>
+</ul>
+<h1 id="队列的分类"><a href="#队列的分类" class="headerlink" title="队列的分类"></a>队列的分类</h1><blockquote>
+<p>为了方便起见，约定：初始化建空队时，令front&#x3D;rear&#x3D;0,当队空时：</p>
+<p>front&#x3D;rear</p>
+<p>当队满时：front&#x3D;rear 亦成立</p>
+</blockquote>
+<h2 id="单队列"><a href="#单队列" class="headerlink" title="单队列"></a>单队列</h2><p>单队列又分为<strong>顺序队列</strong>(数组实现)和<strong>链式队列</strong>(链表实现)。单队列从前面删除元素，从后面插入元素，类似于现实中的排队（只是不允许插队🤣）。</p>
+<h3 id="顺序队列"><a href="#顺序队列" class="headerlink" title="顺序队列"></a>顺序队列</h3><p> 队列的顺序存储结构，又称为顺序队列，顺序队列实际上是运算受限的顺序表。</p>
+<p>在顺序队列，由于数组分配的存储空间存在边界，头尾指针不断增加而不减小（或只减小而不增加），被删除元素的存储空间不能重新利用，会发生”假溢出“，即明明有位置却不能添加元素。</p>
+<blockquote>
+<p>解决假溢出的方法有许多种，如：设定队首指针不动，只要插入元素，在队列的末尾直接插入；只要删除元素，从队首的位置直接删除就行了，但这样会造成大量的数据元素移动。一种更好的办法是，将队列循环起来，也就是循环队列。</p>
+</blockquote>
+<h3 id="链式队列"><a href="#链式队列" class="headerlink" title="链式队列"></a>链式队列</h3><p>链式队列，使用带头指针front和尾指针rear的单链表实现。一般用<strong>单向链表</strong>来实现，不采用循环双链表或者双链表主要是双链表的空间开销（空间复杂度，多前继指针）相对单链表来说大了不少，而单链表只要新增头指针和尾指针就可以轻松实现常数时间内（时间复杂度为O(1)）访问头尾结点。</p>
+<p>Java实现链式队列的其中一种方法：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">linkqueue</span>&#123;</span><br><span class="line">    <span class="keyword">private</span> link front;</span><br><span class="line">    <span class="keyword">private</span> link rear;</span><br><span class="line">    <span class="keyword">public</span> <span class="title function_">linkqueue</span><span class="params">()</span>&#123;</span><br><span class="line">        setup();</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">public</span> <span class="title function_">linkqueue</span><span class="params">(<span class="type">int</span> sz)</span>&#123;</span><br><span class="line">        setup();</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">//初始化</span></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">void</span> <span class="title function_">setup</span><span class="params">()</span>&#123;</span><br><span class="line">        rear=<span class="literal">null</span>;</span><br><span class="line">        front=rear;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">//清空队列</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">clear</span><span class="params">()</span>&#123;</span><br><span class="line">        rear=<span class="literal">null</span>;</span><br><span class="line">        front=rear</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">//插入元素</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">enqueue</span><span class="params">(object it)</span>&#123;</span><br><span class="line">        <span class="keyword">if</span>(rear!=<span class="literal">null</span>)&#123;</span><br><span class="line">            rear.setNext(<span class="keyword">new</span> <span class="title class_">link</span>(it,<span class="literal">null</span>));</span><br><span class="line">            rear=rear.next();</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">else</span> front=rear=<span class="keyword">new</span> <span class="title class_">link</span>(it,<span class="literal">null</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">//删除元素</span></span><br><span class="line">    <span class="keyword">public</span> object <span class="title function_">dequeue</span><span class="params">()</span>&#123;</span><br><span class="line">        <span class="keyword">assert</span>.notfalse(!isempty());</span><br><span class="line">        <span class="type">object</span> <span class="variable">it</span> <span class="operator">=</span> front.element();</span><br><span class="line">        front = front.next();</span><br><span class="line">        <span class="keyword">if</span>(front==<span class="literal">null</span>)</span><br><span class="line">            tear=<span class="literal">null</span>;</span><br><span class="line">        <span class="keyword">return</span> it;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="循环队列"><a href="#循环队列" class="headerlink" title="循环队列"></a>循环队列</h2><p>循环队列可以解决顺序队列的假溢出和越界问题。解决办法就是：从头开始，令rear指向front，这样也就会形成头尾相接的循环，这也就是循环队列名字的由来。但是，在顺序队列中，front&#x3D;&#x3D;rear即表示队列为空，在循环队列则不然，由于头尾相接，队列为满时，也会体现为front&#x3D;&#x3D;rear。这里有两种解决方法：</p>
+<ol>
+<li>可以一个标志变量 <code>flag</code>,当 <code>front==rear</code> 并且 <code>flag=0</code> 的时候队列为空，当<code>front==rear</code> 并<code>flag=1</code> 的时候队列为满。</li>
+<li>队列为空的时候就是 <code>front==rear</code> ，队列满的时候，我们保证数组还有一个空闲的位置，rear 就指向这个空闲位置，那么现在判断队列是否为满的条件就是： <code>(rear+1) % QueueSize= front</code> 。</li>
+</ol>
+<p>循环队列入队时：rear&#x3D;(rear+1)%maxsize，出队时: front&#x3D;(front+1)%maxsize</p>
+<h2 id="双端队列"><a href="#双端队列" class="headerlink" title="双端队列"></a>双端队列</h2><p>双端队列是一个两端都是结尾的队列。队列的每一端都可以插入数据项和移除数据项。这些方法可以叫做insertLeft()和insertRight()，以及removeLeft()和removeRight()。</p>
+<p>如果禁止调用insertLeft()和removeLeft()方法（或禁用右端操作），双端队列的功能就和栈一样。</p>
+<p>如果禁止调用insertLeft()和removeRight()方法（或相反的一对方法），它的功能就和单队列一样了。</p>
+<p>在容器类库中有时会用双端队列来提供栈和队列两种功能。由于不太常用，这里偷个懒，不深入研究了。</p>
+<h2 id="优先级队列"><a href="#优先级队列" class="headerlink" title="优先级队列"></a>优先级队列</h2><p>优先级队列是比栈和队列更专用的数据结构，但它在很多情况下都很有用。像普通队列一样 ，优先级队列有一个队头和一个队尾，并且也是从队头移除数据项。不过在优先级队列中，数据项按<strong>关键字的值</strong>有序，这样一来，关键字最小（或最大）的数据项就总是在队头。数据项插入的时候会按照顺序插入到合适的位置以确保队列的顺序。</p>
+<h1 id="常见应用场景"><a href="#常见应用场景" class="headerlink" title="常见应用场景"></a>常见应用场景</h1><ul>
+<li><strong>阻塞队列：</strong> 阻塞队列可以看成在队列基础上加了阻塞操作的队列。当队列为空的时候，出队操作阻塞，当队列满的时候，入队操作阻塞。使用阻塞队列我们可以很容易实现“生产者 - 消费者“模型。</li>
+<li>消息队列</li>
+<li>操作系统的进程调度</li>
+</ul>
+
       
     </div>
     <footer class="article-footer">
