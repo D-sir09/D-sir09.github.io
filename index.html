@@ -68,6 +68,349 @@
     <div class="outer">
       <section id="main">
   
+    <article id="post-Redis常用命令" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2022/04/02/Redis%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4/" class="article-date">
+  <time datetime="2022-04-02T09:33:20.000Z" itemprop="datePublished">2022-04-02</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2022/04/02/Redis%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4/">Redis 常用命令</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="启动Redis服务端"><a href="#启动Redis服务端" class="headerlink" title="启动Redis服务端"></a><strong>启动Redis服务端</strong></h1><ul>
+<li>redis-server</li>
+</ul>
+<h1 id="启动Redis客户端"><a href="#启动Redis客户端" class="headerlink" title="启动Redis客户端"></a><strong>启动Redis客户端</strong></h1><ul>
+<li>redis-cli</li>
+<li>redis-cli –raw<ul>
+<li>支持中文的启动方式</li>
+</ul>
+</li>
+</ul>
+<h1 id="Redis基本操作"><a href="#Redis基本操作" class="headerlink" title="Redis基本操作"></a><strong>Redis基本操作</strong></h1><ul>
+<li>ping</li>
+<li>测试与redis服务器是否联通, 若联通, 返回 pong </li>
+<li>select (选择数据库进入)<ul>
+<li>可选 0 ~ 15 </li>
+<li>如, select 0 即进入 0 号数据库</li>
+<li>登录Redis客户端后, 若没有做 select 操作, 默认选择 0 号数据库</li>
+</ul>
+</li>
+</ul>
+<h1 id="Redis的数据类型"><a href="#Redis的数据类型" class="headerlink" title="Redis的数据类型"></a>Redis的数据类型</h1><ul>
+<li>Redis 保存的数据都是按照 <strong>键值对</strong> 来保存的</li>
+<li><strong>键</strong> 的数据类型都是字符串</li>
+<li><strong>值</strong> 的数据类型有以下五种<ul>
+<li>字符串 (string)</li>
+<li>哈希 (hash)</li>
+<li>列表 (list)</li>
+<li>无序集合 (set)</li>
+<li>有序集合 (zset)</li>
+</ul>
+</li>
+</ul>
+<h1 id="字符串操作"><a href="#字符串操作" class="headerlink" title="字符串操作"></a>字符串操作</h1><h2 id="添加修改值"><a href="#添加修改值" class="headerlink" title="添加修改值"></a>添加修改值</h2><ul>
+<li>set 键 值 <ul>
+<li>如: set user1 aaa 。 意为设置一个名为 user1 的键,  其值为 aaa</li>
+</ul>
+</li>
+<li>setex 键  过期时间 值<ul>
+<li>过期时间单位为秒</li>
+<li>如: setex user2 3 bbb 。意为设置一个名为 user2 的键，值为 bbb ，过期时间为 3 秒。</li>
+</ul>
+</li>
+<li>mset 键1 值1 键2 值2<ul>
+<li>同时添加多个键值对</li>
+<li>如：mset user3 ccc user4 ddd user5 eee</li>
+</ul>
+</li>
+<li>追加键值<ul>
+<li>append 键 值</li>
+<li>如 ：append user1 haha 。给user1键的 <strong>值</strong> 追加 ‘haha’  , 返回值即为值的大小。</li>
+</ul>
+</li>
+</ul>
+<h2 id="获取值"><a href="#获取值" class="headerlink" title="获取值"></a>获取值</h2><ul>
+<li>get 键<ul>
+<li>如：get user1 。获取 user1 键的值。 输出为 aaahaha</li>
+</ul>
+</li>
+<li>mget 键1 键2 键n …<ul>
+<li>获取多个值。如 mget user1 user2 user3。</li>
+</ul>
+</li>
+</ul>
+<h2 id="删除"><a href="#删除" class="headerlink" title="删除"></a>删除</h2><ul>
+<li>del 键1 键2 键n …<ul>
+<li>如: del user1 user2 user3 。 删除 user1, user2, user3 键。</li>
+<li>删除键会连值一起删去。</li>
+</ul>
+</li>
+</ul>
+<h1 id="键相关操作"><a href="#键相关操作" class="headerlink" title="键相关操作"></a>键相关操作</h1><h2 id="查找"><a href="#查找" class="headerlink" title="查找"></a>查找</h2><ul>
+<li><p>keys 键名</p>
+<ul>
+<li><p>查找对应的键， 若存在，返回查找的键名， 若不存在，返回空。</p>
+</li>
+<li><p>可以使用 keys * 查看所有键。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">mset user1 aaa user2 bbb user3 ccc</span><br><span class="line">keys user1	//输出 user1</span><br><span class="line">keys user10 //无输出</span><br><span class="line">keys *		//输出所有键, 即 user1 user2 user3 。同 keys &#x27;*&#x27;</span><br><span class="line">keys *s*	//输出名称包含s的键, 即 user1 user2 user3 。同keys &#x27;*s*&#x27;</span><br></pre></td></tr></table></figure></li>
+</ul>
+</li>
+</ul>
+<h2 id="判断键是否存在"><a href="#判断键是否存在" class="headerlink" title="判断键是否存在"></a>判断键是否存在</h2><ul>
+<li>exists 键名<ul>
+<li>若存在，则返回1；不存在，则返回0</li>
+<li>exists user1。返回1</li>
+</ul>
+</li>
+</ul>
+<h2 id="查看键对应的值类型"><a href="#查看键对应的值类型" class="headerlink" title="查看键对应的值类型"></a>查看键对应的值类型</h2><ul>
+<li>type 键名<ul>
+<li>如：type user1。返回string。</li>
+</ul>
+</li>
+</ul>
+<h2 id="设置键的过期时间"><a href="#设置键的过期时间" class="headerlink" title="设置键的过期时间"></a>设置键的过期时间</h2><ul>
+<li>expire 键名 秒数<ul>
+<li>为已有的键设置过期时间。与 setex 的区别在于，setex 是在创建键时设置的，而expire则可以为已有的键设置，却不能创建键。</li>
+<li>若存在这个键名，则 expire 返回 1 ，否则返回 0 。</li>
+<li>如：expire user1 10 。 返回1 ，10秒后，输入 keys * ，发现输出的键名无 user1 。</li>
+</ul>
+</li>
+</ul>
+<h2 id="查看键的有效时间"><a href="#查看键的有效时间" class="headerlink" title="查看键的有效时间"></a>查看键的有效时间</h2><ul>
+<li>ttl 键名<ul>
+<li>返回值大于0，代表存在有效时间，且 返回的值即为剩余有效时间，单位：秒。</li>
+<li>返回值为 -1 ，表示永远有效。</li>
+<li>返回值为 -2 ， 表示键不存在</li>
+</ul>
+</li>
+</ul>
+<h1 id="哈希-hash"><a href="#哈希-hash" class="headerlink" title="哈希 (hash)"></a>哈希 (hash)</h1><h2 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h2><ul>
+<li>hash 用于存储 “键值对” 的集合;</li>
+<li>每个 hash 中的键可以理解为字段 (field), 一个字段 (field) 对应一个值 (value) .</li>
+<li>hash 中值 (value) 类型为**字符串(string)**。</li>
+<li>同一个 hash 中字段名不可重复。</li>
+</ul>
+<h2 id="添加值"><a href="#添加值" class="headerlink" title="添加值"></a>添加值</h2><ul>
+<li>hset 键 字段 值<ul>
+<li>如：hset huser1 name tom 。添加一个键 ’huser1‘ ，字段为 ’name‘ ， 值为 ’tom‘ 。</li>
+<li>使用 type huser1 可发现, 返回值为 hash</li>
+<li>输入key *  ，可发现键中多了huser1。</li>
+</ul>
+</li>
+</ul>
+<h2 id="添加多个值"><a href="#添加多个值" class="headerlink" title="添加多个值"></a>添加多个值</h2><ul>
+<li>hmset 键 字段1 值1 字段2 值2 …<ul>
+<li>hmset huser2 name mary sex female (添加一个 humer2 键,  带有2个字段)</li>
+</ul>
+</li>
+</ul>
+<h2 id="获取字段"><a href="#获取字段" class="headerlink" title="获取字段"></a>获取字段</h2><ul>
+<li>hkeys 键<ul>
+<li>获取指定键的所有 <strong>字段名</strong></li>
+<li>如：hkeys huser1。返回 name 。hkeys huser2 。返回 name sex。</li>
+</ul>
+</li>
+</ul>
+<h2 id="获取字段的值"><a href="#获取字段的值" class="headerlink" title="获取字段的值"></a>获取字段的值</h2><ul>
+<li>hget 键 字段名<ul>
+<li>获取字段对应的值</li>
+<li>如： hget huser1 name。输出 tom 。</li>
+</ul>
+</li>
+</ul>
+<h2 id="获取多个字段的值"><a href="#获取多个字段的值" class="headerlink" title="获取多个字段的值"></a>获取多个字段的值</h2><ul>
+<li>hmget 键 字段1 字段2 …<ul>
+<li>如: hmget huser2 name sex 。输出 mary female。</li>
+</ul>
+</li>
+</ul>
+<h2 id="获取所有字段的值"><a href="#获取所有字段的值" class="headerlink" title="获取所有字段的值"></a>获取所有字段的值</h2><ul>
+<li>hvals 键名<ul>
+<li>如：hvals huser2 。输出 mary female。</li>
+</ul>
+</li>
+</ul>
+<h2 id="输出所有字段的名及值"><a href="#输出所有字段的名及值" class="headerlink" title="输出所有字段的名及值"></a>输出所有字段的名及值</h2><ul>
+<li>hgetall 键<ul>
+<li>如：hgetall huser2。输出 name Mary sex female。</li>
+</ul>
+</li>
+</ul>
+<h2 id="删除-1"><a href="#删除-1" class="headerlink" title="删除"></a>删除</h2><ul>
+<li>hdel 键名 字段名<ul>
+<li>如：hdel huser2  sex。输出  1，删除成功；再次输入hdel huser2 sex，输出 0 ，意为找不到此字段。</li>
+<li>删除键中的最后一个字段, 键也会删除。</li>
+<li>只能删除字段，不能删除键，想删除键须用 <strong>del</strong> 。</li>
+</ul>
+</li>
+</ul>
+<h1 id="列表（list）"><a href="#列表（list）" class="headerlink" title="列表（list）"></a>列表（list）</h1><ul>
+<li>列表中每个键有多个值</li>
+<li>列表可以从左侧添加值，也可以从右侧添加值</li>
+</ul>
+<h2 id="添加值-1"><a href="#添加值-1" class="headerlink" title="添加值"></a>添加值</h2><ul>
+<li>从列表左侧添加值<ul>
+<li>lpush 键名 值1 值2 …<ul>
+<li>如:  lpush luser1 aa 。从键 ’luser1‘ 列表的左侧加入值 ’aa’ 。</li>
+<li>自动创建键名，若键名已存在，且为 list 类型，则添加值，并返回列表中当前存在的值的数量；若键名存在，但不是list类型，则报错。</li>
+<li>若插入多个值, 如: lpush luser1 1 2 3 , 则后一个值在列表的靠前位置, 即 3 在列表开头, 然后是 2 ,再然后是 1 。</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>从列表右侧添加值<ul>
+<li>rpush 键名 值1 值2 …<ul>
+<li>如：rpush luser1 bb 。从键 ’luser1‘ 列表的右侧加入值 ’bb’。</li>
+<li>同样可以自动创建键名，若键名已存在，且为 list 类型，则添加值，并返回列表中当前存在的值的数量；若键名存在，但不是list类型，则报错。</li>
+<li>如：rpush luser1 cc dd。返回值为4，即列表中当前存在的值的数量。</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="插入值"><a href="#插入值" class="headerlink" title="插入值"></a>插入值</h2><ul>
+<li>linsert 键 before 或者 after 值<ul>
+<li>在指定的值前面或后面插入新值</li>
+<li>如: linsert luser1 before cc 11 。在 cc 前面插入值 11 。</li>
+<li>linsert luser1 after cc 22 。在 cc 后面插入值 22 。</li>
+</ul>
+</li>
+</ul>
+<h2 id="获取值-1"><a href="#获取值-1" class="headerlink" title="获取值"></a>获取值</h2><ul>
+<li>lrange 键名 start stop<ul>
+<li>start 代表开始索引</li>
+<li>stop代表结束索引</li>
+<li>第一个值的索引为 0 ，最后一个值的索引为 -1 。</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">lrange luser1 0 -1 // 获取 luser1 列表中的所有值</span><br><span class="line">lrange luser1 2 -1 // 从第三个元素开始获取到最后一个值</span><br></pre></td></tr></table></figure>
+
+<h2 id="修改值"><a href="#修改值" class="headerlink" title="修改值"></a>修改值</h2><ul>
+<li>lset 键名 索引 值<ul>
+<li>如： lset luser1 1 china。 把 luser1 键的第二个元素改为china（修改最后一个元素，索引值改为 -1 即可）。</li>
+</ul>
+</li>
+</ul>
+<h2 id="删除值"><a href="#删除值" class="headerlink" title="删除值"></a>删除值</h2><ul>
+<li>lrem 键名 count 值<ul>
+<li>count &#x3D; 0 ,删除指定的所有值。</li>
+<li>count &lt; 0 , 从右往左删除指定数量的值。</li>
+<li>count &gt; 0 , 从左往右删除指定数量的值。</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">lrem luser1 -1 aa 	//从右往左数, 删除一个 aa</span><br><span class="line">lrem luser1 0 aa	//删除所有 aa </span><br></pre></td></tr></table></figure>
+
+<h1 id="无序集合-set"><a href="#无序集合-set" class="headerlink" title="无序集合(set)"></a>无序集合(set)</h1><h2 id="添加值-2"><a href="#添加值-2" class="headerlink" title="添加值"></a>添加值</h2><ul>
+<li>sadd 键名 值1 值2 值3 <ul>
+<li>如 : sadd suser1 aa bb cc 。给一个名为 suser1 的键添加值 ’aa‘ ， ’bb‘ ，’cc‘， 若无此键，则建立一个新的；若有，但不是 set 类型 ，报错，若是 set 类型，则加入集合内（重复值无法加入），返回值为成功加入集合的值的数量。</li>
+<li>集合里不允许有重复值。</li>
+<li>集合里的值不能修改，只能添加和删除。</li>
+<li>值的类型为 string。</li>
+</ul>
+</li>
+</ul>
+<h2 id="删除值-1"><a href="#删除值-1" class="headerlink" title="删除值"></a>删除值</h2><ul>
+<li>srem 键名 值名<ul>
+<li>如：srem suser1 cc。删除 suser1 键指定的值</li>
+</ul>
+</li>
+</ul>
+<h2 id="获取值-2"><a href="#获取值-2" class="headerlink" title="获取值"></a>获取值</h2><ul>
+<li>smembers 键名<ul>
+<li>如：smembers suser1。返回键 suser1 的所有值</li>
+</ul>
+</li>
+</ul>
+<h1 id="有序集合-zset"><a href="#有序集合-zset" class="headerlink" title="有序集合(zset)"></a>有序集合(zset)</h1><ul>
+<li>集合里不允许有重复的值</li>
+<li>有序集合里的值只能添加和删除，不能修改</li>
+<li>有序集合中 <strong>值(value)</strong> 的类型为 <strong>字符串(string)</strong></li>
+<li>每个值都会关联一个 <strong>分数(score)</strong> , 可以为负数, 通过 score 将值从小到大排序</li>
+</ul>
+<h2 id="添加值-3"><a href="#添加值-3" class="headerlink" title="添加值"></a>添加值</h2><ul>
+<li>zadd 键名 score1 值1 score2 值2<ul>
+<li>如: zadd zuser1 1 aa 3 dd 5 ee 2 cc 。返回值为成功添加的值的数量，且添加的值会自动排序。</li>
+</ul>
+</li>
+</ul>
+<h2 id="删除值-2"><a href="#删除值-2" class="headerlink" title="删除值"></a>删除值</h2><p><strong>通过键</strong></p>
+<ul>
+<li>zrem 键 zuser1 dd，删除 zuser1 的 dd ，删除成功则返回 1 。</li>
+</ul>
+<p><strong>通过 score 删除值</strong></p>
+<ul>
+<li>zremrangebyscore 键名 min max<ul>
+<li>min 为删除 score 的最小值，max 为要删除 score 的最大值。</li>
+<li>如：zremrangebyscore zuser1 0 10，删除 score 为 0 至10 之间的值，输出删除掉的值的个数。</li>
+<li>删除所有值后，键将自动删除。</li>
+</ul>
+</li>
+</ul>
+<h2 id="获取值-3"><a href="#获取值-3" class="headerlink" title="获取值"></a>获取值</h2><ul>
+<li>zrange 键名 start stop [withscores]<ul>
+<li>start 从 0 开始, 最后一个元素的索引为 -1</li>
+<li>withscores 代表同时获取 score<ul>
+<li>如 : zrange zuser1 0 -1 withscores 。获取 zuser1 的所有元素，并获取 score。输出aa<br>1 cc 2 dd 3 ee 5</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>通过 score 获取值<ul>
+<li>zrangebyscore 键名 min max<ul>
+<li>min 代表 score 的起始值，max代表 score 的结束值。<ul>
+<li>zrangebyscore zuser1 2 6 ，获取 score 从 2 到 6 的值，输出 cc dd ee 。</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="通过值获取score"><a href="#通过值获取score" class="headerlink" title="通过值获取score"></a>通过值获取score</h2><ul>
+<li>zscore 键名 值<ul>
+<li>如： zscore zuser1 dd ，获取键 zuser1 的值 dd 的 score。</li>
+</ul>
+</li>
+</ul>
+
+      
+    </div>
+    <footer class="article-footer">
+      
+        <a data-url="http://example.com/2022/04/02/Redis%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4/" data-id="cl1ht0h6w0000egu7bzchharm" class="article-share-link" data-share="baidu" data-title="Redis 常用命令">分享到</a>
+      
+
+      
+        <a href="http://example.com/2022/04/02/Redis%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4/#ds-thread" class="article-comment-link">评论</a>
+      
+
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Redis/" rel="tag">Redis</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
     <article id="post-java-8-新特性" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
     <a href="/2022/03/29/java-8-%E6%96%B0%E7%89%B9%E6%80%A7/" class="article-date">
@@ -776,96 +1119,6 @@
 
 
   
-    <article id="post-Java基础 - 链表" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2022/03/23/Java%E5%9F%BA%E7%A1%80%20-%20%E9%93%BE%E8%A1%A8/" class="article-date">
-  <time datetime="2022-03-23T14:45:17.000Z" itemprop="datePublished">2022-03-23</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2022/03/23/Java%E5%9F%BA%E7%A1%80%20-%20%E9%93%BE%E8%A1%A8/">Java基础 - 链表</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h1 id="链表-LinkList"><a href="#链表-LinkList" class="headerlink" title="链表(LinkList)"></a>链表(LinkList)</h1><blockquote>
-<p>链表是一种线性表，但并<strong>不按线性的顺序</strong>存储数据，使用的也不是<strong>连续的内存空间</strong>来存储数据。</p>
-</blockquote>
-<blockquote>
-<p>链表的插入和删除操作的复杂度为 O(1) ，只需要知道目标位置元素的上一个元素即可。但是，在查找一个节点或者访问特定位置的节点的时候复杂度为 O(n) 。 </p>
-</blockquote>
-<blockquote>
-<p>使用链表结构可以克服数组需要预先知道数据大小的缺点，链表结构可以<strong>充分利用计算机内存空间</strong>,实现灵活的<strong>内存动态管理</strong>。但链表不会节省空间，相比于数组会<strong>占用更多的空间</strong>，因为链表中每个节点存放的还有指向其他节点的指针。除此之外，链表不具有数组随机读取的优点。</p>
-</blockquote>
-<p>相对于数组，链表的优点： </p>
-<ul>
-<li>可灵活地分配内存空间，内存利用率高。链表是一种动态数据结构，可以在运行时通过分配和取消分配内存来增长和缩小。</li>
-<li>能在 O(1) 时间内删除或者添加元素，前提是该元素的前一个元素已知，当然也取决于是单链表还是双链表，在双链表中，如果已知该元素的后一个元素，同样可以在 O(1) 时间内删除或者添加该元素。</li>
-<li>易插入和删除元素。在链表中进行插入和删除节点很容易。只需要更新节点下一个指针中的地址。</li>
-</ul>
-<p>缺点：</p>
-<ul>
-<li><p>每次读取元素，都需要从链表头开始一个一个地读取，效率太低。</p>
-</li>
-<li><p>查询第n个元素需要O（k）时间，时间复杂度高。</p>
-</li>
-</ul>
-<br/>
-
-<h2 id="链表的分类"><a href="#链表的分类" class="headerlink" title="链表的分类"></a>链表的分类</h2><h3 id="1-单链表"><a href="#1-单链表" class="headerlink" title="1.单链表"></a>1.单链表</h3><pre><code>     &lt;u&gt;**单向链表**&lt;/u&gt; 只有一个方向，结点只有一个后继指针 next 指向后面的节点。因此，链表这种数据结构通常在物理内存上是不连续的。我们习惯性地把第一个结点叫作头结点，链表通常有一个不保存任何值的 head 节点(头结点)，通过头结点我们可以遍历整个链表。尾结点通常指向 null。
-
-    Java中单链表的创建：
-</code></pre>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> linklist;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Node</span> &#123;</span><br><span class="line">    <span class="type">Node</span> <span class="variable">next</span> <span class="operator">=</span><span class="literal">null</span>;</span><br><span class="line">    <span class="type">int</span> data;</span><br><span class="line">    <span class="keyword">public</span> <span class="title function_">Node</span><span class="params">(<span class="type">int</span> data)</span> &#123;</span><br><span class="line">        <span class="built_in">this</span>.data=data;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<br/>
-
-<h3 id="2-双向链表"><a href="#2-双向链表" class="headerlink" title="2.双向链表"></a>2.双向链表</h3><p><u><strong>双向链表</strong></u> 包含两个指针，一个 prev 指向前一个节点，一个 next 指向后一个节点。</p>
-<pre><code>Java中双向链表的创建：
-</code></pre>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Node</span> &#123;</span><br><span class="line">    Node next; </span><br><span class="line"> <span class="comment">//存放下一个元素的引用地址，尾结点的通常为null。</span></span><br><span class="line">    Node prev;             </span><br><span class="line"> <span class="comment">//存放上一个元素的引用地址，头结点的通常为null。若</span></span><br><span class="line"> <span class="comment">//若尾结点的next值指向头结点，则为双向循环链表，且头结点的prev指向尾结点，则为双向循环链表</span></span><br><span class="line">    Object element;</span><br><span class="line">  </span><br><span class="line">    <span class="keyword">public</span> <span class="title function_">Node</span><span class="params">(Node next, Node prev, Object element)</span> &#123;</span><br><span class="line">        <span class="built_in">super</span>();</span><br><span class="line">        <span class="built_in">this</span>.next = next;</span><br><span class="line">        <span class="built_in">this</span>.prev = prev;</span><br><span class="line">        <span class="built_in">this</span>.element = element;</span><br><span class="line">     &#125;</span><br><span class="line"> </span><br><span class="line">    <span class="keyword">public</span> <span class="title function_">Node</span><span class="params">(Node node)</span> &#123;</span><br><span class="line">        <span class="built_in">this</span>.element = node;</span><br><span class="line">        node.next = <span class="literal">null</span>;</span><br><span class="line">        node.prev = <span class="literal">null</span>;</span><br><span class="line">    &#125;</span><br><span class="line">  </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h3 id="3-循环链表"><a href="#3-循环链表" class="headerlink" title="3.循环链表"></a>3.循环链表</h3><p><u>**循环链表 **</u>其实是一种特殊的单链表，和单链表不同的是循环链表的尾结点不是指向 null，而是指向链表的头结点。</p>
-<p>代码的实现上与单链表类似，只是尾结点不再为null，而是指向头结点</p>
-<br/>
-
-<h3 id="4-双向循环链表"><a href="#4-双向循环链表" class="headerlink" title="4.双向循环链表"></a>4.双向循环链表</h3><p><u><strong>双向循环链表</strong></u> 最后一个节点的 next 指向 head，而 head 的 prev 指向最后一个节点，构成一个环。</p>
-<p>代码的实现上与双向链表类似，但是尾结点的next值指向头结点，头结点的prev指向尾结点。</p>
-<br/>
-
-<h3 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h3><p>链表适用于需要存储的数据元素的个数不确定，并且需要经常添加和删除数据的时候。</p>
-
-      
-    </div>
-    <footer class="article-footer">
-      
-        <a data-url="http://example.com/2022/03/23/Java%E5%9F%BA%E7%A1%80%20-%20%E9%93%BE%E8%A1%A8/" data-id="cl14ef092000020u7gyth4olr" class="article-share-link" data-share="baidu" data-title="Java基础 - 链表">分享到</a>
-      
-
-      
-        <a href="http://example.com/2022/03/23/Java%E5%9F%BA%E7%A1%80%20-%20%E9%93%BE%E8%A1%A8/#ds-thread" class="article-comment-link">评论</a>
-      
-
-      
-  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Java/" rel="tag">Java</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-  
     <article id="post-Java基础 - IO流" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
     <a href="/2022/03/23/Java%E5%9F%BA%E7%A1%80%20-%20IO%E6%B5%81/" class="article-date">
@@ -999,10 +1252,10 @@
 
 
   
-    <article id="post-Java基础 - 栈" class="article article-type-post" itemscope itemprop="blogPost">
+    <article id="post-Java基础 - 链表" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
-    <a href="/2022/03/23/Java%E5%9F%BA%E7%A1%80%20-%20%E6%A0%88/" class="article-date">
-  <time datetime="2022-03-23T14:45:17.000Z" itemprop="datePublished">2022-03-23</time>
+    <a href="/2022/03/23/Java%E5%9F%BA%E7%A1%80%20-%20%E9%93%BE%E8%A1%A8/" class="article-date">
+  <time datetime="2022-03-23T04:37:32.000Z" itemprop="datePublished">2022-03-23</time>
 </a>
     
   </div>
@@ -1013,7 +1266,97 @@
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2022/03/23/Java%E5%9F%BA%E7%A1%80%20-%20%E6%A0%88/">Java基础 - 栈</a>
+      <a class="article-title" href="/2022/03/23/Java%E5%9F%BA%E7%A1%80%20-%20%E9%93%BE%E8%A1%A8/">Java基础 - 链表</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="链表-LinkList"><a href="#链表-LinkList" class="headerlink" title="链表(LinkList)"></a>链表(LinkList)</h1><blockquote>
+<p>链表是一种线性表，但并<strong>不按线性的顺序</strong>存储数据，使用的也不是<strong>连续的内存空间</strong>来存储数据。</p>
+</blockquote>
+<blockquote>
+<p>链表的插入和删除操作的复杂度为 O(1) ，只需要知道目标位置元素的上一个元素即可。但是，在查找一个节点或者访问特定位置的节点的时候复杂度为 O(n) 。 </p>
+</blockquote>
+<blockquote>
+<p>使用链表结构可以克服数组需要预先知道数据大小的缺点，链表结构可以<strong>充分利用计算机内存空间</strong>,实现灵活的<strong>内存动态管理</strong>。但链表不会节省空间，相比于数组会<strong>占用更多的空间</strong>，因为链表中每个节点存放的还有指向其他节点的指针。除此之外，链表不具有数组随机读取的优点。</p>
+</blockquote>
+<p>相对于数组，链表的优点： </p>
+<ul>
+<li>可灵活地分配内存空间，内存利用率高。链表是一种动态数据结构，可以在运行时通过分配和取消分配内存来增长和缩小。</li>
+<li>能在 O(1) 时间内删除或者添加元素，前提是该元素的前一个元素已知，当然也取决于是单链表还是双链表，在双链表中，如果已知该元素的后一个元素，同样可以在 O(1) 时间内删除或者添加该元素。</li>
+<li>易插入和删除元素。在链表中进行插入和删除节点很容易。只需要更新节点下一个指针中的地址。</li>
+</ul>
+<p>缺点：</p>
+<ul>
+<li><p>每次读取元素，都需要从链表头开始一个一个地读取，效率太低。</p>
+</li>
+<li><p>查询第n个元素需要O（k）时间，时间复杂度高。</p>
+</li>
+</ul>
+<br/>
+
+<h2 id="链表的分类"><a href="#链表的分类" class="headerlink" title="链表的分类"></a>链表的分类</h2><h3 id="1-单链表"><a href="#1-单链表" class="headerlink" title="1.单链表"></a>1.单链表</h3><pre><code>     &lt;u&gt;**单向链表**&lt;/u&gt; 只有一个方向，结点只有一个后继指针 next 指向后面的节点。因此，链表这种数据结构通常在物理内存上是不连续的。我们习惯性地把第一个结点叫作头结点，链表通常有一个不保存任何值的 head 节点(头结点)，通过头结点我们可以遍历整个链表。尾结点通常指向 null。
+
+    Java中单链表的创建：
+</code></pre>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> linklist;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Node</span> &#123;</span><br><span class="line">    <span class="type">Node</span> <span class="variable">next</span> <span class="operator">=</span><span class="literal">null</span>;</span><br><span class="line">    <span class="type">int</span> data;</span><br><span class="line">    <span class="keyword">public</span> <span class="title function_">Node</span><span class="params">(<span class="type">int</span> data)</span> &#123;</span><br><span class="line">        <span class="built_in">this</span>.data=data;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<br/>
+
+<h3 id="2-双向链表"><a href="#2-双向链表" class="headerlink" title="2.双向链表"></a>2.双向链表</h3><p><u><strong>双向链表</strong></u> 包含两个指针，一个 prev 指向前一个节点，一个 next 指向后一个节点。</p>
+<pre><code>Java中双向链表的创建：
+</code></pre>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Node</span> &#123;</span><br><span class="line">    Node next; </span><br><span class="line"> <span class="comment">//存放下一个元素的引用地址，尾结点的通常为null。</span></span><br><span class="line">    Node prev;             </span><br><span class="line"> <span class="comment">//存放上一个元素的引用地址，头结点的通常为null。若</span></span><br><span class="line"> <span class="comment">//若尾结点的next值指向头结点，则为双向循环链表，且头结点的prev指向尾结点，则为双向循环链表</span></span><br><span class="line">    Object element;</span><br><span class="line">  </span><br><span class="line">    <span class="keyword">public</span> <span class="title function_">Node</span><span class="params">(Node next, Node prev, Object element)</span> &#123;</span><br><span class="line">        <span class="built_in">super</span>();</span><br><span class="line">        <span class="built_in">this</span>.next = next;</span><br><span class="line">        <span class="built_in">this</span>.prev = prev;</span><br><span class="line">        <span class="built_in">this</span>.element = element;</span><br><span class="line">     &#125;</span><br><span class="line"> </span><br><span class="line">    <span class="keyword">public</span> <span class="title function_">Node</span><span class="params">(Node node)</span> &#123;</span><br><span class="line">        <span class="built_in">this</span>.element = node;</span><br><span class="line">        node.next = <span class="literal">null</span>;</span><br><span class="line">        node.prev = <span class="literal">null</span>;</span><br><span class="line">    &#125;</span><br><span class="line">  </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="3-循环链表"><a href="#3-循环链表" class="headerlink" title="3.循环链表"></a>3.循环链表</h3><p><u>**循环链表 **</u>其实是一种特殊的单链表，和单链表不同的是循环链表的尾结点不是指向 null，而是指向链表的头结点。</p>
+<p>代码的实现上与单链表类似，只是尾结点不再为null，而是指向头结点</p>
+<br/>
+
+<h3 id="4-双向循环链表"><a href="#4-双向循环链表" class="headerlink" title="4.双向循环链表"></a>4.双向循环链表</h3><p><u><strong>双向循环链表</strong></u> 最后一个节点的 next 指向 head，而 head 的 prev 指向最后一个节点，构成一个环。</p>
+<p>代码的实现上与双向链表类似，但是尾结点的next值指向头结点，头结点的prev指向尾结点。</p>
+<br/>
+
+<h3 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h3><p>链表适用于需要存储的数据元素的个数不确定，并且需要经常添加和删除数据的时候。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      
+        <a data-url="http://example.com/2022/03/23/Java%E5%9F%BA%E7%A1%80%20-%20%E9%93%BE%E8%A1%A8/" data-id="cl14ef092000020u7gyth4olr" class="article-share-link" data-share="baidu" data-title="Java基础 - 链表">分享到</a>
+      
+
+      
+        <a href="http://example.com/2022/03/23/Java%E5%9F%BA%E7%A1%80%20-%20%E9%93%BE%E8%A1%A8/#ds-thread" class="article-comment-link">评论</a>
+      
+
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Java/" rel="tag">Java</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-Java基础 - 栈" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2022/03/22/Java%E5%9F%BA%E7%A1%80%20-%20%E6%A0%88/" class="article-date">
+  <time datetime="2022-03-22T14:45:17.000Z" itemprop="datePublished">2022-03-22</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2022/03/22/Java%E5%9F%BA%E7%A1%80%20-%20%E6%A0%88/">Java基础 - 栈</a>
     </h1>
   
 
@@ -1059,11 +1402,11 @@ Java中的代码实现：
     </div>
     <footer class="article-footer">
       
-        <a data-url="http://example.com/2022/03/23/Java%E5%9F%BA%E7%A1%80%20-%20%E6%A0%88/" data-id="cl14ef098000220u7d3wye7lq" class="article-share-link" data-share="baidu" data-title="Java基础 - 栈">分享到</a>
+        <a data-url="http://example.com/2022/03/22/Java%E5%9F%BA%E7%A1%80%20-%20%E6%A0%88/" data-id="cl14ef098000220u7d3wye7lq" class="article-share-link" data-share="baidu" data-title="Java基础 - 栈">分享到</a>
       
 
       
-        <a href="http://example.com/2022/03/23/Java%E5%9F%BA%E7%A1%80%20-%20%E6%A0%88/#ds-thread" class="article-comment-link">评论</a>
+        <a href="http://example.com/2022/03/22/Java%E5%9F%BA%E7%A1%80%20-%20%E6%A0%88/#ds-thread" class="article-comment-link">评论</a>
       
 
       
@@ -1087,7 +1430,7 @@ Java中的代码实现：
   <div class="widget-wrap">
     <h3 class="widget-title">标签</h3>
     <div class="widget">
-      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java/" rel="tag">Java</a><span class="tag-list-count">7</span></li></ul>
+      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java/" rel="tag">Java</a><span class="tag-list-count">7</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Redis/" rel="tag">Redis</a><span class="tag-list-count">1</span></li></ul>
     </div>
   </div>
 
@@ -1096,7 +1439,7 @@ Java中的代码实现：
   <div class="widget-wrap">
     <h3 class="widget-title">标签云</h3>
     <div class="widget tagcloud">
-      <a href="/tags/Java/" style="font-size: 10px;">Java</a>
+      <a href="/tags/Java/" style="font-size: 20px;">Java</a> <a href="/tags/Redis/" style="font-size: 10px;">Redis</a>
     </div>
   </div>
 
@@ -1105,7 +1448,7 @@ Java中的代码实现：
   <div class="widget-wrap">
     <h3 class="widget-title">归档</h3>
     <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/03/">三月 2022</a><span class="archive-list-count">7</span></li></ul>
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/04/">四月 2022</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/03/">三月 2022</a><span class="archive-list-count">7</span></li></ul>
     </div>
   </div>
 
@@ -1115,6 +1458,10 @@ Java中的代码实现：
     <h3 class="widget-title">近期文章</h3>
     <div class="widget">
       <ul>
+        
+          <li>
+            <a href="/2022/04/02/Redis%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4/">Redis 常用命令</a>
+          </li>
         
           <li>
             <a href="/2022/03/29/java-8-%E6%96%B0%E7%89%B9%E6%80%A7/">java 8 新特性</a>
@@ -1130,10 +1477,6 @@ Java中的代码实现：
         
           <li>
             <a href="/2022/03/24/Java%E5%9F%BA%E7%A1%80-%E9%98%9F%E5%88%97/">Java基础 - 队列</a>
-          </li>
-        
-          <li>
-            <a href="/2022/03/23/Java%E5%9F%BA%E7%A1%80%20-%20%E9%93%BE%E8%A1%A8/">Java基础 - 链表</a>
           </li>
         
       </ul>
