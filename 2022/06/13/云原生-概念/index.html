@@ -1,0 +1,656 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
+  <link rel="icon" href="/img/fluid.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="John Doe">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="云原生 (Cloud Natvie) 是一种将应用程序以微服务的形式构建并使之运行在容器化和动态编排平台之上的方式，这些平台充分利用了云计算模型的优势。云原生关注的是应用如何构建和部署，而非运行在哪里。 这些技术能够赋能组织&#x2F;企业在公有云、私有云和混合云等现代和动态的开发环境里构建和运行可扩展的应用程序。这些应用程序是从头开始构建的，以松散耦合原则进行系统设计，并且专门针对云级别的规模">
+<meta property="og:type" content="article">
+<meta property="og:title" content="什么是云原生架构？云原生的概念是什么？">
+<meta property="og:url" content="http://example.com/2022/06/13/%E4%BA%91%E5%8E%9F%E7%94%9F-%E6%A6%82%E5%BF%B5/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="云原生 (Cloud Natvie) 是一种将应用程序以微服务的形式构建并使之运行在容器化和动态编排平台之上的方式，这些平台充分利用了云计算模型的优势。云原生关注的是应用如何构建和部署，而非运行在哪里。 这些技术能够赋能组织&#x2F;企业在公有云、私有云和混合云等现代和动态的开发环境里构建和运行可扩展的应用程序。这些应用程序是从头开始构建的，以松散耦合原则进行系统设计，并且专门针对云级别的规模">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2022-06-13T09:43:47.000Z">
+<meta property="article:modified_time" content="2022-07-14T08:14:38.457Z">
+<meta property="article:author" content="John Doe">
+<meta property="article:tag" content="云计算">
+<meta property="article:tag" content="云原生">
+<meta name="twitter:card" content="summary_large_image">
+  
+  
+  
+  <title>什么是云原生架构？云原生的概念是什么？ - Hexo</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"example.com","root":"/","version":"1.9.2","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 6.1.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Fluid</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                首页
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                归档
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                分类
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                标签
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                关于
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              &nbsp;<i class="iconfont icon-search"></i>&nbsp;
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">&nbsp;<i
+                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="什么是云原生架构？云原生的概念是什么？"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2022-06-13 17:43" pubdate>
+          2022年6月13日 下午
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          2.8k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          24 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">什么是云原生架构？云原生的概念是什么？</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <blockquote>
+<p><strong>云原生 (Cloud Natvie)</strong> 是一种将应用程序以微服务的形式构建并使之运行在容器化和动态编排平台之上的方式，这些平台充分利用了云计算模型的优势。<strong>云原生关注的是应用如何构建和部署，而非运行在哪里</strong>。</p>
+<p>这些技术能够赋能组织&#x2F;企业在公有云、私有云和混合云等现代和动态的开发环境里构建和运行可扩展的应用程序。这些应用程序是从头开始构建的，以松散耦合原则进行系统设计，并且专门针对云级别的规模和性能进行了优化，基于托管服务并利用持续交付来实现可靠性和更快的上市速度。总体目标是提高速度、可扩展性，以及最终提高利润率。</p>
+</blockquote>
+<h1 id="云原生带来了什么"><a href="#云原生带来了什么" class="headerlink" title="云原生带来了什么"></a>云原生带来了什么</h1><ul>
+<li><p><strong>速度</strong>。数以月计才能将一个想法落地成一个实际产品的周期变成了现在的几天甚至几小时。从本质上讲，云原生 (Cloud Native) 策略是关于如何解决技术风险的。过去，我们规避风险的标准方法是保持缓慢而谨慎地行动。云原生 (Cloud Native) 的新方法则是依靠采取 <strong>小型、可逆和低风险</strong> 的步骤来实现迅速前进。</p>
+</li>
+<li><p><strong>可扩展性</strong>。随着业务的发展，在更多的地方为更多的用户提供更广泛的设备支持，同时又要维持灵敏响应和管理成本，而不会导致失败，成为了战略需要。</p>
+</li>
+<li><p><strong>利润</strong>。</p>
+</li>
+<li><p>在云基础设施的新世界中，战略目标是只在新客户上线时购买所需的额外资源。支出从前期的 CAPEX（购买新机器以预期成功）变成了 OPEX（按需支付额外的服务器）。</p>
+</li>
+</ul>
+<h1 id="云原生设计原则"><a href="#云原生设计原则" class="headerlink" title="云原生设计原则"></a>云原生设计原则</h1><h2 id="松散耦合的微服务"><a href="#松散耦合的微服务" class="headerlink" title="松散耦合的微服务"></a>松散耦合的微服务</h2><p><strong>微服务</strong> 是一种将 <strong>单体应用程序</strong> 拆解成 <strong>一套小型服务</strong> 的方法，每个服务都在自己的进程中运行，并使用像 HTTP 等轻量级协议进行通信。这些服务是围绕业务功能构建的，可以通过 <strong>完全自动化</strong> 的部署机制独立进行部署。</p>
+<h2 id="使用最佳的语言和框架组合进行开发"><a href="#使用最佳的语言和框架组合进行开发" class="headerlink" title="使用最佳的语言和框架组合进行开发"></a>使用最佳的语言和框架组合进行开发</h2><p>每个云原生应用程序的服务都应该使用最适合该功能的语言和框架来开发。云原生应用程序是 <strong>多语言的</strong>，服务使用各种编程语言、运行时和框架。例如，开发人员可以使用 Node.js 来开发基于 WebSocket 的实时流服务，同时选择 Python 来构建机器学习基础服务，并选择 spring-boot 来提供 REST APIs 接口。这种细粒度的微服务开发方式使得开发者能够选择最合适的语言和框架来开发去开发特定的任务。</p>
+<h2 id="以互动和协作为中心的-APIs"><a href="#以互动和协作为中心的-APIs" class="headerlink" title="以互动和协作为中心的 APIs"></a>以互动和协作为中心的 APIs</h2><p>云原生服务使用轻量级 APIs，这些 APIs 基于表述性状态转移（REST）等协议来暴露其功能。内部服务使用 Thrift、Protobuf、gRPC 等二进制协议进行通信，以获得更好的性能。</p>
+<h2 id="无状态且可大规模扩展"><a href="#无状态且可大规模扩展" class="headerlink" title="无状态且可大规模扩展"></a>无状态且可大规模扩展</h2><p>云原生应用将其 <strong>状态</strong> 存储在数据库或其他外部实体中，因此实例可以随意上下线，任一实例都可以处理请求。实例不依赖于底层基础设施，底层基础设施允许应用程序以 <strong>高度分布式的方式运行</strong>，并且仍然保持其状态独立于底层基础设施的弹性机制。从可伸缩性的角度来看，架构非常简单，只需向集群添加普通的商用服务器节点就可以扩展应用程序。</p>
+<h2 id="复原韧性作为架构核心"><a href="#复原韧性作为架构核心" class="headerlink" title="复原韧性作为架构核心"></a>复原韧性作为架构核心</h2><p>复原韧性是指 <strong>系统从故障中恢复并继续运行</strong> 的能力。它不是故障规避，而是以避免停机和数据丢失为目标去处理故障。复原韧性的目标是在发生故障后将应用程序恢复到能完全正常运行的状态。复原韧性提供以下内容：</p>
+<ul>
+<li><strong>高可用性</strong> - 应用程序保持健康状态继续运行的能力而无需大量宕机。</li>
+<li><strong>灾难恢复</strong> - 应用程序从罕见但重大意外事件中恢复的能力：非临时、大规模的故障，比如波及整个区域的服务中断。</li>
+</ul>
+<p>使应用程序更具韧性的主要方法之一是通过冗余机制。HA 和 DR 高可用方案使用多节点集群、多区域部署、数据复制、无单点故障、持续监控等实现。</p>
+<p>以下是实现复原韧性的一些策略：</p>
+<ul>
+<li><strong>重试临时故障</strong> - 临时故障可能是由于网络连接短暂丢失、数据库连接突然掉线或服务繁忙导致的超时造成的。一般这种临时故障能通过简单重试请求来解决。</li>
+<li><strong>跨实例的负载均衡 - 万物集群化</strong>。无状态应用程序应该能够通过向集群添加更多节点进行扩展。</li>
+<li><strong>优雅降级</strong> - 如果一个服务故障且没有故障转移路径，应用程序应该要能优雅降级，同时持续提供可接受的用户体验。</li>
+<li><strong>限流高吞吐的佃户&#x2F;用户</strong> - 有时候一小撮用户可能会产生过多的负载。这将会对其他用户产生影响，从而降低应用程序的整体可用性。</li>
+<li><strong>使用断路器</strong> - 断路器模式可以防止应用程序反复尝试一个可能失败的操作。断路器封装了对服务的调用并跟踪最近的失败次数。如果失败次数超过阈值，则断路器开始返回错误代码而不再是调用服务。</li>
+<li><strong>应用补偿事务</strong> - 补偿事务是一种撤销另一个已完成事务造成的影响的事务。在分布式系统中，实现事务强一致性可能非常困难。补偿事务是一种通过使用一系列更小的单个事务来实现一致性的方法，这些事务的每个步骤都可以被撤消。</li>
+</ul>
+<p>测试复原韧性 – 通常复原韧性测试不能像测试应用程序功能一样（通过运行单元测试、集成测试等）。相反，你必须测试在间歇性发生故障的情况下端到端的工作负载情况。例如：通过崩溃进程注入故障、过期证书、让相关服务不可用等。像<a target="_blank" rel="noopener" href="https://github.com/Netflix/chaosmonkey"> chaos monkey </a>这样的框架可以用于这种混沌测试。</p>
+<h2 id="打包成轻量级容器并编排"><a href="#打包成轻量级容器并编排" class="headerlink" title="打包成轻量级容器并编排"></a>打包成轻量级容器并编排</h2><p><strong>容器</strong> 可以将应用程序隔离至共享操作系统内核的小型轻量级执行环境中。容器大小通常以 MB 为单位，因此所使用的资源远远少于虚拟机，并且几乎是瞬时启动。Docker 现在已成为容器技术的标准，它提供的最大优势是 <strong>便携性</strong>。</p>
+<p>云原生应用程序使用 Kubernetes 进行部署，Kubernetes 是一个开源平台，旨在自动部署、扩展和管理容器化应用程序。Kubernetes 最初由谷歌开发，现在已经成为部署云原生应用程序的操作系统。</p>
+<h2 id="通过-CI-x2F-CD-实施敏捷-DevOps-和自动化"><a href="#通过-CI-x2F-CD-实施敏捷-DevOps-和自动化" class="headerlink" title="通过 CI&#x2F;CD 实施敏捷 DevOps 和自动化"></a>通过 CI&#x2F;CD 实施敏捷 DevOps 和自动化</h2><p>DevOps，是“<strong>开发</strong>”和“<strong>运维</strong>”的融合，描述了实现快速敏捷开发和可扩展、可靠运维所需的组织架构、实践和文化。</p>
+<p>持续集成（CI）和持续交付（CD）是一组操作原则，它们使应用程序开发团队能够更频繁、更可靠地交付代码变更。CI 的技术目标是建立一致和自动化的方法来构建、打包和测试应用程序。有了集成过程中的一致性，团队能够更频繁地提交代码变更，从而实现更好的协作和软件质量。</p>
+<p>持续交付 (CD) 负责交接持续集成 (CI)，完成后续的工作。CD 将交付应用程序到选定的基础设施环境的过程自动化，它挑选出 CI 构建完成的应用包，将其部署到像 Dev、QA、Performance 等各种环境中，分阶段运行各种测试，如集成测试、性能测试等，最后部署到生产环境中。通常 CD 的 pipeline 中几乎不需要人工介入，鉴于持续部署 (Continuous Deployment) 是一个完全自动化的 pipeline，从代码拉取到生产环境部署的整个过程都自动化了。</p>
+<h2 id="弹性-动态扩容-x2F-缩容"><a href="#弹性-动态扩容-x2F-缩容" class="headerlink" title="弹性 - 动态扩容&#x2F;缩容"></a>弹性 - 动态扩容&#x2F;缩容</h2><p>得益于云计算的弹性特性，云原生应用得以在运行高峰期通过增加计算资源来缓解压力。如果你部署在云上的电子商务应用正在经历一个流量高峰，你可以设置额外的计算资源给应用，等到高峰消退之后再下线这些资源。云原生应用可以根据需求调整增删的资源和规模。</p>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/%E9%9A%8F%E7%AC%94/" class="category-chain-item">随笔</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/%E4%BA%91%E8%AE%A1%E7%AE%97/">#云计算</a>
+      
+        <a href="/tags/%E4%BA%91%E5%8E%9F%E7%94%9F/">#云原生</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>什么是云原生架构？云原生的概念是什么？</div>
+      <div>http://example.com/2022/06/13/云原生-概念/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>John Doe</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2022年6月13日</div>
+        </div>
+      
+      
+      <div class="license-meta-item">
+        <div>许可协议</div>
+        <div>
+          
+            
+            
+              <a target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+              <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                <i class="iconfont icon-by"></i>
+              </span>
+              </a>
+            
+          
+        </div>
+      </div>
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2022/06/15/Go-%E4%B8%AD%E7%9A%84Atomic-%E7%AE%80%E5%8D%95Demo/" title="Go 中的Atomic_简单Demo">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">Go 中的Atomic_简单Demo</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2022/06/01/gin-%E7%AC%94%E8%AE%B0/" title="gin 入门">
+                        <span class="hidden-mobile">gin 入门</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;目录</p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.0/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.18.2/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      headingSelector : CONFIG.toc.headingSelector || 'h1,h2,h3,h4,h5,h6',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      collapseDepth   : CONFIG.toc.collapseDepth || 0,
+      scrollSmooth    : true,
+      headingsOffset  : -boardTop
+    });
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.10/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>
