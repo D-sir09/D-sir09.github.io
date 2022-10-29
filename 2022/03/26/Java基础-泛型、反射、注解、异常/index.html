@@ -1,0 +1,800 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
+  <link rel="icon" href="/img/fluid.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="John Doe">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="泛型 一般的类和方法，只能使用具体的类型：基本类型或自定义的类。如果要编写可以应用于多种类型的代码，这种刻板的限制会极大的束缚代码。   泛型实现了“参数化类型的概念”。泛型这个术语的意思是：“适用于许多许多的类型”。泛型旨在编写更通用的代码，要使代码能应用于“某种不具体的类型，而不是一个具体的接口或类。在代码中表现为允许在定义类、接口时通过一个标识表示类中某个属性的类型或者是某个方法的返回值及参">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Java 泛型、反射、注解、异常">
+<meta property="og:url" content="http://example.com/2022/03/26/Java%E5%9F%BA%E7%A1%80-%E6%B3%9B%E5%9E%8B%E3%80%81%E5%8F%8D%E5%B0%84%E3%80%81%E6%B3%A8%E8%A7%A3%E3%80%81%E5%BC%82%E5%B8%B8/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="泛型 一般的类和方法，只能使用具体的类型：基本类型或自定义的类。如果要编写可以应用于多种类型的代码，这种刻板的限制会极大的束缚代码。   泛型实现了“参数化类型的概念”。泛型这个术语的意思是：“适用于许多许多的类型”。泛型旨在编写更通用的代码，要使代码能应用于“某种不具体的类型，而不是一个具体的接口或类。在代码中表现为允许在定义类、接口时通过一个标识表示类中某个属性的类型或者是某个方法的返回值及参">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2022-03-26T00:09:36.000Z">
+<meta property="article:modified_time" content="2022-07-14T07:36:59.540Z">
+<meta property="article:author" content="John Doe">
+<meta property="article:tag" content="Java">
+<meta name="twitter:card" content="summary_large_image">
+  
+  
+  
+  <title>Java 泛型、反射、注解、异常 - Hexo</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"example.com","root":"/","version":"1.9.2","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 6.1.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Fluid</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                首页
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                归档
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                分类
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                标签
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                关于
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              &nbsp;<i class="iconfont icon-search"></i>&nbsp;
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">&nbsp;<i
+                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="Java 泛型、反射、注解、异常"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2022-03-26 08:09" pubdate>
+          2022年3月26日 早上
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          6.8k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          57 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">Java 泛型、反射、注解、异常</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h1 id="泛型"><a href="#泛型" class="headerlink" title="泛型"></a>泛型</h1><blockquote>
+<p>一般的类和方法，只能使用具体的类型：基本类型或自定义的类。如果要编写可以应用于多种类型的代码，这种刻板的限制会极大的束缚代码。</p>
+</blockquote>
+<p> 泛型实现了“<strong>参数化类型</strong>的概念”。泛型这个术语的意思是：“适用于许多许多的类型”。泛型旨在编写更通用的代码，要使代码能应用于“某种不具体的类型，而不是一个具体的接口或类。在代码中表现为允许在定义类、接口时通过一个<strong>标识</strong>表示类中某个属性的<strong>类型</strong>或者是某个方法的<strong>返回值</strong>及<strong>参数类型</strong>。这个类型参数将在使用时（例如，继承或实现这个接口，用这个类型声明变量、创建对象时确定（即传入实际的类型参数，也称为类型实参）。</p>
+<p>泛型一般有三种使用方式：泛型类、泛型接口、泛型方法</p>
+<h2 id="泛型类"><a href="#泛型类" class="headerlink" title="泛型类"></a>泛型类</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-comment">//此处T可以随便写为任意标识，常见的如T、E、K、V等形式的参数常用于表示泛型</span><br><span class="hljs-comment">//在实例化泛型类时，必须指定T的具体类型</span><br><span class="hljs-comment">//静态方法中不能使用类的泛型(编译不会通过),但是泛型方法可以声明为静态</span><br><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">Generic</span>&lt;T&gt; &#123;<br>    <span class="hljs-keyword">private</span> T key;<br>    <span class="hljs-keyword">public</span> <span class="hljs-title function_">Generic</span><span class="hljs-params">(T key)</span> &#123;<br>        <span class="hljs-built_in">this</span>.key = key;<br>    &#125;<br>    <span class="hljs-keyword">public</span> T <span class="hljs-title function_">getKey</span><span class="hljs-params">()</span> &#123;<br>        <span class="hljs-keyword">return</span> key;<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+
+
+<h2 id="泛型接口"><a href="#泛型接口" class="headerlink" title="泛型接口"></a>泛型接口</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">public</span> <span class="hljs-keyword">interface</span> <span class="hljs-title class_">Generator</span>&lt;T&gt; &#123;<br>    <span class="hljs-keyword">public</span> T <span class="hljs-title function_">method</span><span class="hljs-params">()</span>;<br>&#125;<br><span class="hljs-comment">//实现泛型接口，指定类型</span><br><span class="hljs-keyword">class</span> <span class="hljs-title class_">GeneratorImpl</span> <span class="hljs-keyword">implements</span> <span class="hljs-title class_">Generator</span>&lt;String&gt;&#123;<br>    <span class="hljs-meta">@Override</span><br>    <span class="hljs-keyword">public</span> String <span class="hljs-title function_">method</span><span class="hljs-params">()</span> &#123;<br>        <span class="hljs-keyword">return</span> <span class="hljs-string">&quot;hello&quot;</span>;<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+
+
+<h2 id="泛型方法"><a href="#泛型方法" class="headerlink" title="泛型方法"></a>泛型方法</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> &lt;E&gt; <span class="hljs-keyword">void</span> <span class="hljs-title function_">printArray</span><span class="hljs-params">(E[] inputArray)</span> &#123;<br>    <span class="hljs-keyword">for</span> (E element : inputArray) &#123;<br>        System.out.printf(<span class="hljs-string">&quot;%s &quot;</span>, element);<br>    &#125;<br>    System.out.println();<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<h2 id="常用通配符"><a href="#常用通配符" class="headerlink" title="常用通配符"></a>常用通配符</h2><ul>
+<li>？ 表示不确定的 Java 类型</li>
+<li>T (type) 表示具体的一个 Java 类型</li>
+<li>K V (key value) 分别代表 Java 键值中的 Key Value</li>
+<li>E (element) 代表 Element</li>
+</ul>
+<p>Object是所有类的根类，任何类的对象都可以设置给Object引用变量，使用的时候可能需要进行<strong>类型强制转换</strong>，但是用了泛型T、E这类标识符后，在实际用之前类型就已经确定了，不需要再进行类型强制转换</p>
+<h3 id="限定通配符与非限定通配符"><a href="#限定通配符与非限定通配符" class="headerlink" title="限定通配符与非限定通配符"></a>限定通配符与非限定通配符</h3><p>限定通配符对类型进行限制，泛型中有两种限定通配符：</p>
+<ol>
+<li>表示类型的上界，格式为&lt;? extends T&gt;，表示类型必须为T类型或者T子类</li>
+<li>表示类型的下界，格式为&lt;? super T&gt;，表示类型必须为T类型或T类型的父类。</li>
+</ol>
+<h1 id="反射"><a href="#反射" class="headerlink" title="反射"></a>反射</h1><p>Reflection（反射)是被视为动态语言的关键，反射机制允许程序在执行期借助于Reflection API取得任何类的内部信息，并能直接操作任意对象的<strong>内部属性及方法</strong>。反射被称为框架的灵魂，<strong>框架 &#x3D; 反射 + 注解 + 设计模式</strong>。通过反射机制，程序可以知道：</p>
+<ul>
+<li><p>任意一个类的所有属性和方法。</p>
+</li>
+<li><p>任意一个对象的一个属性和方法</p>
+</li>
+</ul>
+<h2 id="使用场景"><a href="#使用场景" class="headerlink" title="使用场景"></a>使用场景</h2><p><strong>IDE的自动提示功能</strong>，如：输入对象，提示其属性和方法。此时，IDE会通过反射，获取类和对象的具体信息。</p>
+<h2 id="Class类"><a href="#Class类" class="headerlink" title="Class类"></a>Class类</h2><p><code>Class</code>类是反射实现的基础。在程序运行期间，JVM 始终为所有的对象维护一个被称为<strong>运行时的类型标识</strong>，这个信息跟踪着每个对象所属的类的完整结构信息，包括包名、类名、实现的接口、拥有的方法和字段等。可以通过专门的 Java 类访问这些信息，这个类就是 <code>Class</code> 类。我们可以把 <code>Class</code> 类理解为<strong>类的类型</strong>，一个 <code>Class</code> 对象，称为类的类型对象，<strong>一个</strong> <strong><code>Class</code></strong> <strong>对象对应一个加载到 JVM 中的一个</strong> <strong><code>.class</code></strong> <strong>文件</strong>。也就是说，在Java中，<strong>类也是对象</strong>，类是java.lang.Class类的实例对象，这个对象称为类的类类型（class type)。反射在读取一个类之前，必须获取到java.lang.Class对象。Class对象包含类的所有信息，通过Class对象的方法，可以获取到<strong>构造方法，成员变量，成员方法和接口</strong>等信息。获取方法有：</p>
+<ul>
+<li>字面量直接获取：对象名.class。这种方式不会触发类的初始化但会将类加载到方法区。</li>
+<li>Object类的getClass方法，例如Object.getClass()。这种方式会触发类的初始化。</li>
+<li>Class的静态方法。如：Class.forName()。这也会触发类的初始化。</li>
+</ul>
+<h3 id="常用API"><a href="#常用API" class="headerlink" title="常用API"></a>常用API</h3><p><strong>Field</strong></p>
+<p>成员变量，类中的属性对象。通过Class类的getDeclaredField() （获取方法）或getDeclaredFields() （获取所有方法，包括私有方法）方法获取。</p>
+<p><strong>Class类的基本API</strong></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs java"><br><br><span class="hljs-number">1.</span> Class.getName()可以获取类的名称<br><span class="hljs-number">2.</span> Class.getSimpleName();<span class="hljs-comment">//不包含包名的类的名称</span><br><span class="hljs-number">3.</span> Class.getMethods()获取类的【<span class="hljs-keyword">public</span>方法】集合，【包括继承来的】<br><span class="hljs-number">4.</span> Class.getDeclaredMethods()获取的是所有该类【自己声明】的方法，【不问访问权限】<br></code></pre></td></tr></table></figure>
+
+<p><strong>Method</strong></p>
+<p>类中的方法对象。包括了静态方法和成员方法（包括抽象方法在内）。通过invoke()来完成方法被动态调用的目的。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-number">1.</span> m.getReturnType()得到该方法的返回值类型的类类型（class），如<span class="hljs-type">int</span>.<span class="hljs-keyword">class</span> <span class="hljs-title class_">String</span>.class<br><span class="hljs-number">2.</span> m.getName()得到方法的名称<br><span class="hljs-number">3.</span> m.getParameterTypes()获得参数列表类型的类类型，如参数为(<span class="hljs-type">int</span>,<span class="hljs-type">int</span>)则得到(<span class="hljs-type">int</span>.class ,<span class="hljs-type">int</span> class)<br></code></pre></td></tr></table></figure>
+
+<p><strong>getDeclaredMethod</strong></p>
+<p>可以获取指定方法名和参数的方法对象 Method(对象，参数列表)。</p>
+<p><strong>privateGetDeclaredMethods</strong></p>
+<p>从缓存或JVM中获取该Class中申明的方法列表。</p>
+<p><strong>searchMethods</strong></p>
+<p>从返回的方法列表里找到一个匹配名称和参数的方法对象。如果找到一个匹配的Method，则重新copy一份返回，即Method.copy()方法。</p>
+<p><strong>ReflectionData</strong></p>
+<p>用来缓存从JVM中读取类的如下属性数据。</p>
+<p><strong>Constructor</strong></p>
+<p>构造函数。类的构造方法</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-number">1</span>、通过Class.getConstructor()获得Constructor[]所有公有构造方法信息<br><span class="hljs-number">2</span>、建议getDeclaredConstructors()获取自己声明的构造方法<br><span class="hljs-number">3</span>、Constructor.getName():String<br><span class="hljs-number">4</span>、Constructor.getParameterTypes():Class[]<br></code></pre></td></tr></table></figure>
+
+<h1 id="注解-Annotation"><a href="#注解-Annotation" class="headerlink" title="注解(Annotation)"></a>注解(Annotation)</h1><blockquote>
+<ul>
+<li>从 Java 5 开始出现</li>
+<li>Annotaticm 能被用来为程序元素（ 类、方法、成员变量等）设置元数据</li>
+<li>所有注解都隐式继承了 Annotation java.lang.annotation.Annotation 接口</li>
+</ul>
+</blockquote>
+<p>注解可以看作是一种特殊的注释，主要用于修饰类、方法或者变量，本质上是一个继承了<code>Annotation</code> 的特殊接口。</p>
+<p>注解只有被解析之后才会生效，常见的解析方法有两种：</p>
+<ul>
+<li><strong>编译期直接扫描</strong> ：编译器在编译 Java 代码的时候扫描对应的注解并处理，比如某个方法使用<code>@Override</code> 注解，编译器在编译的时候就会检测当前的方法是否重写了父类对应的方法。</li>
+<li><strong>运行期通过反射处理</strong> ：像框架中自带的注解(比如 Spring 框架的 <code>@Value</code> 、<code>@Component</code>)都是通过反射来进行处理的。</li>
+</ul>
+<p>JDK 提供了很多内置的注解（比如 <code>@Override</code> 、<code>@Deprecated</code>），同时，我们还可以自定义注解。</p>
+<h2 id="基本注解"><a href="#基本注解" class="headerlink" title="基本注解"></a>基本注解</h2><ul>
+<li>在 java.lang 包下</li>
+<li><code>@Override</code> 限定重写父类方法</li>
+<li><code>@Deprecated</code> 标示已过时（与文档注释中的 @deprecated 标记的作用基本相同），其他程序使用已过时的类、方法时，编译器会发出警告</li>
+<li><code>@SuppressWarnings(&quot;变量值&quot;)</code> 抑制编译器警告（常见的变量值：unused, rawtypes, unchecked, serial, deprecation, all）</li>
+<li><code>@SafeVarargs</code> 抑制编译器“堆污染”警告（Java 7 新增）</li>
+<li><code>@FunctionalInterface</code> 函数式接口（接口中只有一个抽象方法）（Java 8 新增）</li>
+</ul>
+<h2 id="JDK-的元注解"><a href="#JDK-的元注解" class="headerlink" title="JDK 的元注解"></a>JDK 的元注解</h2><ul>
+<li>在 java.lang.annotation 包下，用于修饰其它的 Annotation 定义</li>
+<li><code>@Target</code>：用于指定被修饰的注解能用于修饰哪些程序元素常量值封装在 ElementType 枚举类中：TYPE、FIELD、CONSTRUCTOR、METHOD、LOCAL_VARIABLE、PACKAGE、PARAMETER、ANNOTATION_TYPE</li>
+<li><code>@Retention</code>：用于指定被修饰的注解可以保留多长时间常量值封装在 RetentionPolicy 枚举类中：SOURCE、CLASS（默认值）、RUNTIME。此修饰可以通过反射提取</li>
+<li><code>@Documented</code>：其修饰的注解会保存到 API 文档中</li>
+<li><code>@Inherited</code>：其修饰的注解可以被子类所继承</li>
+</ul>
+<h2 id="自定义注解"><a href="#自定义注解" class="headerlink" title="自定义注解"></a>自定义注解</h2><ul>
+<li><p>Annotation 中的属性以<strong>无参数的抽象方法</strong>的形式来定义</p>
+</li>
+<li><p>属性的类型只能是基本类型、String、Class、annotation、枚举及这些类型一维数组</p>
+</li>
+<li><p>在定义 Annotation 的属性时可以使用 <code>default</code> 为其指定默认值</p>
+</li>
+<li><p>使用带属性的注解时，必须为该注解的所有没有默认值的属性指定值</p>
+</li>
+<li><p>对于 Annotation 中<strong>变量名为 value</strong>属性，在使用该注解时可以直接在该注解后的括号里指定 value 属性的值，无须使用“value &#x3D; 变量值”的形式</p>
+</li>
+</ul>
+<h1 id="异常"><a href="#异常" class="headerlink" title="异常"></a>异常</h1><blockquote>
+<p>异常是程序中的一些错误，但并不是所有的错误都是异常，并且错误有时候是可以避免的。</p>
+<p>比如说，你的代码少了一个分号，那么运行出来结果是提示是错误 java.lang.Error；如果你用System.out.println(11&#x2F;0)，那么你是因为你用0做了除数，会抛出 java.lang.ArithmeticException 的异常。</p>
+</blockquote>
+<p>异常发生的原因有很多，通常包含以下几大类：</p>
+<ul>
+<li>用户输入了非法数据。</li>
+<li>要打开的文件不存在。</li>
+<li>网络通信时连接中断，或者JVM内存溢出。</li>
+</ul>
+<p>这些异常有的是因为用户错误引起，有的是程序错误引起的，还有其它一些是因为物理错误引起的。</p>
+<h2 id="Throwable"><a href="#Throwable" class="headerlink" title="Throwable"></a>Throwable</h2><p>在Java中，所有的异常都有一个共同的祖先 java.lang 包中的 <strong>Throwable</strong> <strong>类</strong>。Throwable 类有两个重要的子类:</p>
+<ul>
+<li><p>Exception：程序本身可以处理的异常，可以通过catch来进行捕获。Exception又可以分为Checked Exception (受检查异常，必须处理) 和 Unchecked Exception (不受检查异常，可以不处理)。</p>
+</li>
+<li><p>Error ：Error 属于程序无法处理的错误 ，我们没办法通过 catch 来进行捕获不建议通过catch捕获 。例如Java 虚拟机运行错误（Virtual MachineError）、虚拟机内存不够错误(OutOfMemoryError)、类定义错误（NoClassDefFoundError）等 。这些异常发生时，Java 虚拟机（JVM）一般会选择线程终止。</p>
+</li>
+</ul>
+<blockquote>
+<h3 id="Checked-Exception-和-Unchecked-Exception的区别："><a href="#Checked-Exception-和-Unchecked-Exception的区别：" class="headerlink" title="Checked Exception 和 Unchecked Exception的区别："></a>Checked Exception 和 Unchecked Exception的区别：</h3><p>​    一般情况下，Java 代码在编译过程中，如果受检查异常没有被  <code> catch/throw</code>  处理的话，就没办法通过编译 。除了    <code>RuntimeException(运行时异常)</code> 及其子类（<code>NullPointerException、NumberFormatException、ArrayIndexOutOfBoundsException</code>…）以外，其他的<code>Exception</code>类及其子类都属于受检查异常 。常见的受检查异常有： IO 相关的异常、<code>ClassNotFoundException</code> 、<code>SQLException</code>…。</p>
+</blockquote>
+<p>以及重要的实例方法：</p>
+<ul>
+<li><code>String getMessage()</code>：返回该异常的描述信息（提示给用户）</li>
+<li><code>String toString()</code>：返回该异常的类型和描述信息</li>
+<li><code>void printStackTrace()</code>：打印异常的跟踪栈信息到控制台，包括异常的类型、异常的原因、异常出现的位置（开发和调试）</li>
+<li><code>String getLocalizedMessage()</code>: 返回异常对象的本地化信息。使用 <code>Throwable</code> 的子类覆盖这个方法，可以生成本地化信息。如果子类没有覆盖该方法，则该方法返回的信息与 <code>getMessage()</code>返回的结果相同</li>
+</ul>
+<h2 id="捕获异常"><a href="#捕获异常" class="headerlink" title="捕获异常"></a>捕获异常</h2><p>使用 try 和 catch 关键字可以捕获异常。try&#x2F;catch 代码块放在异常可能发生的地方。</p>
+<p>不管 try 块中的代码是否出现异常，也不管哪一个 catch 块被执行，甚至在 try 块或 catch 块中执行了 return 语句，<strong>finally 块总会被执行</strong>（除非在 try 块或会执行的 catch 块中调用退出 JVM 的相关方法）。</p>
+<p>try 块必须和 catch 块或和 finally 块同在，<strong>不能单独存在</strong>，catch 块或和 finally 块二者<strong>必须出现一个</strong>，finally 块必须位于所有的 catch 块之后。</p>
+<blockquote>
+<p>当程序执行 try 块、catch 块时遇到 <strong>return 或 throw 语句</strong>时，系统<strong>不会立即结束该方法</strong>，而是去寻找该异常处理流程中是否包含 finally 块，如果有 finally 块，系统<strong>立即开始执行 finally 块</strong>——只有当 finally 块执行完成后，系统才会再次跳回来执行 try 块、catch 块里的 return 或 throw 语句；如果 finally 块里也使用了 <strong>return 或 throw 等导致方法终止的语句</strong>，finally 块已经终止了方法，系统将<strong>不会跳回去</strong>执行 try 块、catch 块里的任何代码</p>
+</blockquote>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">try</span>&#123;<br>  <span class="hljs-comment">// 程序代码</span><br>&#125;<span class="hljs-keyword">catch</span>(异常类型<span class="hljs-number">1</span> 异常的变量名<span class="hljs-number">1</span>)&#123;<br>  <span class="hljs-comment">// 程序代码</span><br>&#125;<span class="hljs-keyword">catch</span>(异常类型<span class="hljs-number">2</span> 异常的变量名<span class="hljs-number">2</span>)&#123;<br>  <span class="hljs-comment">// 程序代码</span><br>&#125;<span class="hljs-keyword">finally</span>&#123;<br>  <span class="hljs-comment">// 程序代码</span><br>  <span class="hljs-comment">// 关闭资源对象、流对象等</span><br>&#125;<br></code></pre></td></tr></table></figure>
+
+<h2 id="使用-throws-声明抛出异常"><a href="#使用-throws-声明抛出异常" class="headerlink" title="使用 throws 声明抛出异常"></a>使用 throws 声明抛出异常</h2><p>在可能出现异常的方法上<strong>声明</strong>可能抛出的异常类型，用于表示当前方法不处理异常，而是<strong>提醒</strong>该方法的调用者来处理异常，因为throws不具有处理异常的功能。</p>
+<ul>
+<li><p>当前方法使用 throws 声明抛出异常，该异常将交给上一级调用者处理，调用者要么 try … catch，要么也 throws</p>
+</li>
+<li><p>如果 main 方法也使用 throws 声明抛出异常，该异常将交给 JVM 处理，JVM 对异常的处理方法是，打印异常的跟踪栈信息，并中止程序运行</p>
+</li>
+<li><p>子类方法声明抛出的异常类和父类方法声明抛出的异常类<strong>相同或者是其子类</strong>（运行时异常除外）</p>
+<p>例：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">class</span> <span class="hljs-title class_">MyMath</span>&#123;<br> <span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-type">int</span> <span class="hljs-title function_">div</span><span class="hljs-params">(<span class="hljs-type">int</span> x, <span class="hljs-type">int</span> y)</span> <span class="hljs-keyword">throws</span> Exception&#123;<br>             <span class="hljs-keyword">return</span> x/y;<br>        &#125;<br>&#125;<br></code></pre></td></tr></table></figure></li>
+</ul>
+<h2 id="使用-throw-自行抛出异常"><a href="#使用-throw-自行抛出异常" class="headerlink" title="使用 throw 自行抛出异常"></a>使用 throw 自行抛出异常</h2><p>throw 语句可以单独使用，但throw 后面只能跟一个<strong>异常对象</strong> 。在有返回值的方法中，可以使用 throw <strong>来避免返回一个空值</strong></p>
+<ul>
+<li>如果 throw 语句抛出的异常是 Checked 异常，则该 throw 语句必须处于 try 块里，或处于带 throws 声明的方法中</li>
+<li>如果 throw 语句抛出的异常是 Runtime 异常，则该语句无须放在 try 块里，也无须放在带 throws 声明抛出的方法中</li>
+<li>在 catch 块中使用 throw 语句，方法既可以捕获异常，还可以抛出异常给方法的调用者</li>
+</ul>
+<p>语法格式：</p>
+<figure class="highlight haxe"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs haxe"><span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> <span class="hljs-type">ExceptionClass</span>(<span class="hljs-string">&quot;异常信息&quot;</span>);<span class="hljs-comment">//终止方法</span><br></code></pre></td></tr></table></figure>
+
+<h2 id="自定义异常"><a href="#自定义异常" class="headerlink" title="自定义异常"></a>自定义异常</h2><ul>
+<li><p>自定义 Checked 异常，应继承 Exception</p>
+</li>
+<li><p>自定义 Runtime 异常，应继承 RuntimeException</p>
+</li>
+<li><p>所有异常都必须是 Throwable 的子类。</p>
+<p>可以像下面这样定义自己的异常类：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">class</span> <span class="hljs-title class_">MyException</span> <span class="hljs-keyword">extends</span> <span class="hljs-title class_">Exception</span>&#123;<br><br>&#125;<br></code></pre></td></tr></table></figure>
+
+<blockquote>
+<ol>
+<li><p>只继承Exception 类来创建的异常类是检查性异常类。</p>
+</li>
+<li><p>一个异常类和其它任何类一样，包含有变量和方法。</p>
+</li>
+</ol>
+</blockquote>
+</li>
+</ul>
+<h2 id="异常处理规则"><a href="#异常处理规则" class="headerlink" title="异常处理规则"></a>异常处理规则</h2><ul>
+<li>不要过度使用异常：<ul>
+<li>对于完全已知的错误，应该编写处理这种错误的代码，增加程序的健壮性</li>
+<li>对外部的、不能确定和预知的运行时错误才使用异常</li>
+</ul>
+</li>
+<li>不要使用过于庞大的 try 块</li>
+<li>避免使用 Catch All 语句</li>
+<li>不要忽略捕获到的异常</li>
+</ul>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/" class="category-chain-item">编程语言</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/Java/">#Java</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>Java 泛型、反射、注解、异常</div>
+      <div>http://example.com/2022/03/26/Java基础-泛型、反射、注解、异常/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>John Doe</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2022年3月26日</div>
+        </div>
+      
+      
+      <div class="license-meta-item">
+        <div>许可协议</div>
+        <div>
+          
+            
+            
+              <a target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+              <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                <i class="iconfont icon-by"></i>
+              </span>
+              </a>
+            
+          
+        </div>
+      </div>
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2022/03/27/Java%E5%9F%BA%E7%A1%80-%E5%A4%9A%E7%BA%BF%E7%A8%8B/" title="Java 多线程">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">Java 多线程</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2022/03/24/Java%E5%9F%BA%E7%A1%80-%E9%98%9F%E5%88%97/" title="Java基础 - 队列">
+                        <span class="hidden-mobile">Java基础 - 队列</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;目录</p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.0/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.18.2/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      headingSelector : CONFIG.toc.headingSelector || 'h1,h2,h3,h4,h5,h6',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      collapseDepth   : CONFIG.toc.collapseDepth || 0,
+      scrollSmooth    : true,
+      headingsOffset  : -boardTop
+    });
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.10/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>

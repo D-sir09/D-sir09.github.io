@@ -1,0 +1,716 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
+  <link rel="icon" href="/img/fluid.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="John Doe">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="Java 8 新增了许多新特性，这里主要列举其中几个重要的。  Lambda 表达式 Lambda 表达式是推动 Java 8 发布的最重要新特性。是继泛型(Generics)和注解(Annotation)以来最大的变化。Lambda 表达式由参数列表、箭头（-&gt;）和 Lambda 主体组成。它是一种匿名函数，java 8 允许把函数作为参数传递进方法中。 使用 Lambda 表达式可以使">
+<meta property="og:type" content="article">
+<meta property="og:title" content="java 8 新特性">
+<meta property="og:url" content="http://example.com/2022/03/29/java-8-%E6%96%B0%E7%89%B9%E6%80%A7/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="Java 8 新增了许多新特性，这里主要列举其中几个重要的。  Lambda 表达式 Lambda 表达式是推动 Java 8 发布的最重要新特性。是继泛型(Generics)和注解(Annotation)以来最大的变化。Lambda 表达式由参数列表、箭头（-&gt;）和 Lambda 主体组成。它是一种匿名函数，java 8 允许把函数作为参数传递进方法中。 使用 Lambda 表达式可以使">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2022-03-29T13:59:26.000Z">
+<meta property="article:modified_time" content="2022-07-14T08:05:07.993Z">
+<meta property="article:author" content="John Doe">
+<meta property="article:tag" content="Java">
+<meta name="twitter:card" content="summary_large_image">
+  
+  
+  
+  <title>java 8 新特性 - Hexo</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"example.com","root":"/","version":"1.9.2","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 6.1.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Fluid</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                首页
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                归档
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                分类
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                标签
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                关于
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              &nbsp;<i class="iconfont icon-search"></i>&nbsp;
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">&nbsp;<i
+                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="java 8 新特性"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2022-03-29 21:59" pubdate>
+          2022年3月29日 晚上
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          13k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          105 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">java 8 新特性</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <blockquote>
+<p>Java 8 新增了许多新特性，这里主要列举其中几个重要的。</p>
+</blockquote>
+<h1 id="Lambda-表达式"><a href="#Lambda-表达式" class="headerlink" title="Lambda 表达式"></a>Lambda 表达式</h1><p> <strong>Lambda</strong> 表达式是推动 Java 8 发布的最重要新特性。是继泛型(<code>Generics</code>)和注解(<code>Annotation</code>)以来最大的变化。Lambda 表达式由<strong>参数列表</strong>、<strong>箭头</strong>（<code>-&gt;</code>）和 <strong>Lambda 主体</strong>组成。它是一种匿名函数，java 8 允许把函数作为参数传递进方法中。</p>
+<p>使用 Lambda 表达式可以使代码变的更加简洁紧凑。让 java 也能支持简单的<em>函数式编程</em>。lambda表达式的特征:</p>
+<ul>
+<li><strong>可选类型声明：</strong>不需要声明参数类型，编译器可以统一识别参数值。</li>
+<li><strong>可选的参数圆括号：</strong>一个参数无需定义圆括号()，但多个参数需要定义圆括号。</li>
+<li><strong>可选的大括号：</strong>如果主体包含了一个语句，就不需要使用大括号{}。</li>
+<li><strong>可选的返回关键字：</strong>如果主体只有一个表达式返回值则编译器会自动返回值，大括号需要指定表达式返回了一个数值。</li>
+</ul>
+<blockquote>
+<p>在 Lambda 主体中引用的局部变量必须使用 <code>final</code> 修饰或不被后面的代码修改（类似匿名内部类）, 不能在 lambda 内部修改定义在域外的局部变量，否则会编译错误。</p>
+</blockquote>
+<h2 id="实例"><a href="#实例" class="headerlink" title="实例"></a>实例</h2><p><strong>Runnable 接口</strong></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">new</span> <span class="hljs-title class_">Thread</span>(() -&gt; System.out.println(<span class="hljs-string">&quot;It&#x27;s a lambda function!&quot;</span>)).start();<br><span class="hljs-comment">//输出 It&#x27;s a lambda function!</span><br><br><span class="hljs-comment">//语句等价于</span><br><span class="hljs-keyword">new</span> <span class="hljs-title class_">Thread</span>(<span class="hljs-keyword">new</span> <span class="hljs-title class_">Runnable</span>() &#123;<br>            <span class="hljs-meta">@Override</span><br>            <span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">run</span><span class="hljs-params">()</span> &#123;<br>                System.out.println(<span class="hljs-string">&quot;It&#x27;s a lambda function!&quot;</span>);<br>            &#125;<br>&#125;).start();<br></code></pre></td></tr></table></figure>
+
+<p><strong>自定义接口:</strong> </p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-meta">@FunctionalInterface</span><br><span class="hljs-keyword">public</span> <span class="hljs-keyword">interface</span> <span class="hljs-title class_">LambdaInterface</span> &#123;<br> <span class="hljs-keyword">void</span> <span class="hljs-title function_">f</span><span class="hljs-params">()</span>;<br>&#125;<br><span class="hljs-comment">//使用</span><br><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">LambdaClass</span> &#123;<br>    <span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">forEg</span><span class="hljs-params">()</span> &#123;<br>        lambdaInterfaceDemo(()-&gt; System.out.println(<span class="hljs-string">&quot;自定义函数式接口&quot;</span>));<br>    &#125;<br>    <span class="hljs-comment">//函数式接口参数</span><br>    <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">lambdaInterfaceDemo</span><span class="hljs-params">(LambdaInterface i)</span>&#123;<br>        System.out.println(i);<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<h1 id="方法引用"><a href="#方法引用" class="headerlink" title="方法引用"></a>方法引用</h1><p>方法引用使用一对冒号 <strong>::</strong>  ，通过方法的名字来指向一个方法。方法引用可以使语言的构造更紧凑简洁，减少冗余代码。</p>
+<ul>
+<li>方法引用主要有四类（仅有一个方法调用的 Lambda 方法体）<ul>
+<li>指向静态方法的方法引用，<code>args -&gt; ClassName.staticMethod(args)</code> 等价 <code>ClassName::staticMethod</code></li>
+<li>指向任意类型的实例方法的方法引用，<code>(arg0, rest) -&gt; arg0.instanceMethod(rest)</code> 等价 <code>ClassName::instanceMethod</code>（arg0 的类型是 ClassName）</li>
+<li>指向现有对象的实例方法的方法引用，<code>args -&gt; expr.instanceMethos(args)</code> 等价 <code>expr::instanceMethod</code></li>
+<li>构造函数引用，<code>ClassName::new</code>（需要有无参构造器）</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><code class="hljs java"> <span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">main</span><span class="hljs-params">(String args[])</span>&#123;<br>      <span class="hljs-type">List</span> <span class="hljs-variable">names</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">ArrayList</span>();<br> <br>      names.add(<span class="hljs-string">&quot;Tencent&quot;</span>);<br>      names.add(<span class="hljs-string">&quot;Taobao&quot;</span>);<br>      names.add(<span class="hljs-string">&quot;Baidu&quot;</span>);<br>      names.add(<span class="hljs-string">&quot;Bytedance&quot;</span>);<br> <br>      names.forEach(System.out::println);<br>   &#125;<br><span class="hljs-comment">/*</span><br><span class="hljs-comment">Tencent</span><br><span class="hljs-comment">Taobao</span><br><span class="hljs-comment">Baidu</span><br><span class="hljs-comment">Bytedance</span><br><span class="hljs-comment">*/</span><br></code></pre></td></tr></table></figure>
+
+<h1 id="函数式接口"><a href="#函数式接口" class="headerlink" title="函数式接口"></a>函数式接口</h1><p>函数式接口(Functional Interface)是一个有且仅有一个抽象方法，但是可以有多个非抽象方法的接口。<strong>函数式接口可以被隐式转换为 lambda 表达式。</strong></p>
+<p>JDK 1.8 之前已有的函数式接口:</p>
+<ul>
+<li>java.lang.Runnable</li>
+<li>java.util.concurrent.Callable</li>
+<li>java.security.PrivilegedAction</li>
+<li>java.util.Comparator</li>
+<li>java.io.FileFilter</li>
+<li>java.nio.file.PathMatcher</li>
+<li>java.lang.reflect.InvocationHandler</li>
+<li>java.beans.PropertyChangeListener</li>
+<li>java.awt.event.ActionListener</li>
+<li>javax.swing.event.ChangeListener</li>
+</ul>
+<p>DK 1.8 新增加的函数接口：</p>
+<ul>
+<li>java.util.function</li>
+</ul>
+<p>定义一个函数式接口:</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-meta">@FunctionalInterface</span><br><span class="hljs-keyword">interface</span> <span class="hljs-title class_">GreetingService</span> &#123;<br>    <span class="hljs-keyword">void</span> <span class="hljs-title function_">sayMessage</span><span class="hljs-params">(String message)</span>;<br>&#125;<br><span class="hljs-comment">//使用Lambda表达式实现该接口</span><br><span class="hljs-type">GreetingService</span> <span class="hljs-variable">greetService1</span> <span class="hljs-operator">=</span> message -&gt; System.out.println(<span class="hljs-string">&quot;Hello &quot;</span> + message);<br></code></pre></td></tr></table></figure>
+
+
+
+<h1 id="流-Stream"><a href="#流-Stream" class="headerlink" title="流(Stream)"></a>流(Stream)</h1><ul>
+<li>Java 8 新增了 <code>java.util.stream.Stream</code> 包</li>
+<li>流：从支持<strong>数据处理操作</strong>的<strong>源</strong>生成的<strong>元素序列</strong></li>
+<li>集合是一个内存中的数据结构，包含数据结构中目前所有的值，其主要目的是以特定的时间&#x2F;空间复杂度存储和访问元素，表达计算，它可以检索(Retrieve)和逻辑处理集合数据、包括筛选、排序、统计、计数等。</li>
+<li>流并不<strong>存储数据</strong>，也不会<strong>改变源对象</strong>。</li>
+</ul>
+<blockquote>
+<p>流只能遍历一次。它的源数据可以是 <code>Collection</code>、<code>Array</code> 等。由于它的方法参数都是函数式接口类型，所以一般和 Lambda 配合使用。</p>
+<p>流类型：stream 串行流。parallelStream 并行流，可多线程执行。</p>
+</blockquote>
+<h2 id="实例化"><a href="#实例化" class="headerlink" title="实例化"></a>实例化</h2><ul>
+<li><p>通过集合：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-meta">@Test</span><br>    <span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">test1</span><span class="hljs-params">()</span>&#123;<br>        List&lt;Employee&gt; employees = EmployeeData.getEmployees();<br><br><span class="hljs-comment">//        default Stream&lt;E&gt; stream() : 返回一个顺序流</span><br>        Stream&lt;Employee&gt; stream = employees.stream();<br><br><span class="hljs-comment">//        default Stream&lt;E&gt; parallelStream() : 返回一个并行流</span><br>        Stream&lt;Employee&gt; parallelStream = employees.parallelStream();<br><br>    &#125;<br></code></pre></td></tr></table></figure>
+</li>
+<li><p>通过数组:</p>
+</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-meta">@Test</span><br>   <span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">test2</span><span class="hljs-params">()</span>&#123;<br>       <span class="hljs-type">int</span>[] arr = <span class="hljs-keyword">new</span> <span class="hljs-title class_">int</span>[]&#123;<span class="hljs-number">1</span>,<span class="hljs-number">2</span>,<span class="hljs-number">3</span>,<span class="hljs-number">4</span>,<span class="hljs-number">5</span>,<span class="hljs-number">6</span>&#125;;<br>       <span class="hljs-comment">//调用Arrays类的static &lt;T&gt; Stream&lt;T&gt; stream(T[] array): 返回一个流</span><br>       <span class="hljs-type">IntStream</span> <span class="hljs-variable">stream</span> <span class="hljs-operator">=</span> Arrays.stream(arr);<br><br>       <span class="hljs-type">Employee</span> <span class="hljs-variable">e1</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">Employee</span>(<span class="hljs-number">1001</span>,<span class="hljs-string">&quot;Tom&quot;</span>);<br>       <span class="hljs-type">Employee</span> <span class="hljs-variable">e2</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">Employee</span>(<span class="hljs-number">1002</span>,<span class="hljs-string">&quot;Jerry&quot;</span>);<br>       Employee[] arr1 = <span class="hljs-keyword">new</span> <span class="hljs-title class_">Employee</span>[]&#123;e1,e2&#125;;<br>       Stream&lt;Employee&gt; stream1 = Arrays.stream(arr1);<br>   &#125;<br></code></pre></td></tr></table></figure>
+
+<h2 id="流的用法"><a href="#流的用法" class="headerlink" title="流的用法"></a>流的用法</h2><blockquote>
+<figure class="highlight crmsh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs crmsh">中间操作（Intermediate <span class="hljs-keyword">Operations</span>）：中间操作会返回一个新的流，一个流可以后面跟随零个或多个intermediate操作。其目的主要是打开流，做出某种程度的数据映射/过滤，然后会返回一个新的流，交给下一个操作使用。这类操作都是惰性化的（lazy），就是说，仅仅调用到这类方法，并没有真正开始流的遍历。而是在终端操作开始的时候才真正开始执行。<br>最终操作（Terminal <span class="hljs-keyword">Operations</span>）：是指返回最终的结果。一个流只能有一个terminal操作，当这个操作执行后，流就被使用“光”了，无法再被操作。所以这必定是流的最后一个操作。Terminal操作的执行，才会真正开始流的遍历，并且会生成一个结果，或者一个 side effect。<br></code></pre></td></tr></table></figure>
+</blockquote>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br></pre></td><td class="code"><pre><code class="hljs java">List&lt;String&gt; stringList = <span class="hljs-keyword">new</span> <span class="hljs-title class_">ArrayList</span>&lt;&gt;();<br>stringList.add(<span class="hljs-string">&quot;ddd2&quot;</span>);<br>stringList.add(<span class="hljs-string">&quot;aaa2&quot;</span>);<br>stringList.add(<span class="hljs-string">&quot;bbb1&quot;</span>);<br>stringList.add(<span class="hljs-string">&quot;aaa1&quot;</span>);<br>stringList.add(<span class="hljs-string">&quot;bbb3&quot;</span>);<br>stringList.add(<span class="hljs-string">&quot;ccc&quot;</span>);<br>stringList.add(<span class="hljs-string">&quot;bbb2&quot;</span>);<br>stringList.add(<span class="hljs-string">&quot;ddd1&quot;</span>);<br><span class="hljs-comment">//Filter（筛选）</span><br>		stringList<br>                .stream()<br>                .filter((s) -&gt; s.startsWith(<span class="hljs-string">&quot;a&quot;</span>))<br>                .forEach(System.out::println);<span class="hljs-comment">//aaa2 aaa1</span><br><span class="hljs-comment">//Stream 提供了新的方法 &#x27;forEach&#x27; 来迭代流中的每个数据</span><br><br><span class="hljs-comment">/*</span><br><span class="hljs-comment">Sorted(排序)。排序是一个 中间操作，返回的是排序好后的 Stream。如果不指定一个自定义的 Comparator 则会使用默认排序（不会影响原有的数据源）。</span><br><span class="hljs-comment">*/</span><br> 		stringList<br>                .stream()<br>                .sorted()<br>                .filter((s) -&gt; s.startsWith(<span class="hljs-string">&quot;a&quot;</span>))<br>                .forEach(System.out::println);<span class="hljs-comment">// aaa1 aaa2</span><br><span class="hljs-comment">//Map（映射）。中间操作 map 会将元素根据指定的 Function 接口来依次将元素转成另外的对象</span><br>		stringList<br>                .stream()<br>                .map(String::toUpperCase)<br>                .sorted((a, b) -&gt; b.compareTo(a))<br>                .forEach(System.out::println);<br><span class="hljs-comment">// &quot;DDD2&quot;, &quot;DDD1&quot;, &quot;CCC&quot;, &quot;BBB3&quot;, &quot;BBB2&quot;, &quot;BBB1&quot;, &quot;AAA2&quot;, &quot;AAA1&quot;</span><br><br><span class="hljs-comment">/*</span><br><span class="hljs-comment">Match(匹配)。Stream提供了多种匹配操作，允许检测指定的Predicate是否匹配整个Stream。所有的匹配操作都是 最终操作 ，并返回一个 boolean 类型的值。</span><br><span class="hljs-comment">*/</span><br><br> 		<span class="hljs-type">boolean</span> <span class="hljs-variable">anyStartsWithA</span> <span class="hljs-operator">=</span><br>                stringList<br>                        .stream()<br>                        .anyMatch((s) -&gt; s.startsWith(<span class="hljs-string">&quot;a&quot;</span>));<br>        System.out.println(anyStartsWithA);      <span class="hljs-comment">// true</span><br><br>        <span class="hljs-type">boolean</span> <span class="hljs-variable">allStartsWithA</span> <span class="hljs-operator">=</span><br>                stringList<br>                        .stream()<br>                        .allMatch((s) -&gt; s.startsWith(<span class="hljs-string">&quot;a&quot;</span>));<br><br>        System.out.println(allStartsWithA);      <span class="hljs-comment">// false</span><br><br>        <span class="hljs-type">boolean</span> <span class="hljs-variable">noneStartsWithZ</span> <span class="hljs-operator">=</span><br>                stringList<br>                        .stream()<br>                        .noneMatch((s) -&gt; s.startsWith(<span class="hljs-string">&quot;z&quot;</span>));<br><br>        System.out.println(noneStartsWithZ);      <span class="hljs-comment">// true</span><br><span class="hljs-comment">//Count(计数)。Count是一个 最终操作，返回Stream中元素的个数，返回值类型是 long。</span><br>        <span class="hljs-type">long</span> <span class="hljs-variable">startsWithB</span> <span class="hljs-operator">=</span><br>                stringList<br>                        .stream()<br>                        .filter((s) -&gt; s.startsWith(<span class="hljs-string">&quot;b&quot;</span>))<br>                        .count();<br>        System.out.println(startsWithB);    <span class="hljs-comment">// 3</span><br><span class="hljs-comment">/*</span><br><span class="hljs-comment">Reduce(规约)。这是一个 最终操作 ，允许通过指定的函数来将stream中的多个元素规约为一个元素，规约后的结果是通过 Optional 接口表示的：</span><br><span class="hljs-comment">*/</span><br>		Optional&lt;String&gt; reduced =<br>                stringList<br>                        .stream()<br>                        .sorted()<br>                        .reduce((s1, s2) -&gt; s1 + <span class="hljs-string">&quot;#&quot;</span> + s2);<br><br>        reduced.ifPresent(System.out::println);<br>		<span class="hljs-comment">//aaa1#aaa2#bbb1#bbb2#bbb3#ccc#ddd1#ddd2</span><br><span class="hljs-comment">//limit(切片)。获取指定数量的流。</span><br>		stringList<br>                .stream()<br>                .limit(<span class="hljs-number">2</span>)<br>                .forEach(System.out::println);<span class="hljs-comment">//ddd2 aaa2</span><br>		<br>		stringList<br>                .stream()<br>                .limit(<span class="hljs-number">5</span>)<br>                .forEach(System.out::println);<span class="hljs-comment">//ddd2 aaa2 bbb1 aaa1 bbb3</span><br><br></code></pre></td></tr></table></figure>
+
+<h2 id="Parallel-Streams-并行流"><a href="#Parallel-Streams-并行流" class="headerlink" title="Parallel Streams(并行流)"></a>Parallel Streams(并行流)</h2><p>前面提到过Stream有串行和并行两种，串行Stream上的操作是在一个线程中依次完成，而并行Stream则是在多个线程上同时执行。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-type">int</span> <span class="hljs-variable">max</span> <span class="hljs-operator">=</span> <span class="hljs-number">1000000</span>;<br>List&lt;String&gt; values = <span class="hljs-keyword">new</span> <span class="hljs-title class_">ArrayList</span>&lt;&gt;(max);<br><span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> <span class="hljs-variable">i</span> <span class="hljs-operator">=</span> <span class="hljs-number">0</span>; i &lt; max; i++) &#123;<br>    <span class="hljs-type">UUID</span> <span class="hljs-variable">uuid</span> <span class="hljs-operator">=</span> UUID.randomUUID();<br>    values.add(uuid.toString());<br>&#125;<br><span class="hljs-comment">//串行排序</span><br><span class="hljs-type">long</span> <span class="hljs-variable">t0</span> <span class="hljs-operator">=</span> System.nanoTime();<br><span class="hljs-type">long</span> <span class="hljs-variable">count</span> <span class="hljs-operator">=</span> values.stream().sorted().count();<br>System.out.println(count);<br><br><span class="hljs-type">long</span> <span class="hljs-variable">t1</span> <span class="hljs-operator">=</span> System.nanoTime();<br><br><span class="hljs-type">long</span> <span class="hljs-variable">millis</span> <span class="hljs-operator">=</span> TimeUnit.NANOSECONDS.toMillis(t1 - t0);<br>System.out.println(String.format(<span class="hljs-string">&quot;sequential sort took: %d ms&quot;</span>, millis));<br><br><span class="hljs-comment">//并行排序</span><br><span class="hljs-type">long</span> <span class="hljs-variable">t0</span> <span class="hljs-operator">=</span> System.nanoTime();<br><br>        <span class="hljs-type">long</span> <span class="hljs-variable">count</span> <span class="hljs-operator">=</span> values.parallelStream().sorted().count();<br>        System.out.println(count);<br><br>        <span class="hljs-type">long</span> <span class="hljs-variable">t1</span> <span class="hljs-operator">=</span> System.nanoTime();<br><br>        <span class="hljs-type">long</span> <span class="hljs-variable">millis</span> <span class="hljs-operator">=</span> TimeUnit.NANOSECONDS.toMillis(t1 - t0);<br>        System.out.println(String.format(<span class="hljs-string">&quot;parallel sort took: %d ms&quot;</span>, millis));<br><br></code></pre></td></tr></table></figure>
+
+<h1 id="Date-API-日期时间相关"><a href="#Date-API-日期时间相关" class="headerlink" title="Date API (日期时间相关)"></a>Date API (日期时间相关)</h1><p>Java 8在 <code>java.time</code> 包下包含一个全新的日期和时间API。</p>
+<ul>
+<li><p>在新API中时区使用 ZoneId 来表示。时区可以很方便的使用静态方法of来获取到。 抽象类<code>ZoneId</code>（在<code>java.time</code>包中）表示一个区域标识符。 </p>
+</li>
+<li><p>Java 8 新增了 LocalDate 与 LocalDateTime等类来解决日期处理方法，同时引入了一个新的类DateTimeFormatter 来解决日期格式化问题。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br></pre></td><td class="code"><pre><code class="hljs Java"><span class="hljs-comment">// 获取当前日期</span><br><span class="hljs-type">LocalDate</span> <span class="hljs-variable">today</span> <span class="hljs-operator">=</span> LocalDate.now();<br>today.lengthOfMonth(); <span class="hljs-comment">// today.get(ChronoField.DAY_OF_MONTH);//都是获取当前月份的天数,</span><br><span class="hljs-comment">//前者在 import java.time.LocalDate 包, 后者在 java.time.temporal.ChronoField 包;</span><br><span class="hljs-comment">// 判断是否时闰年</span><br>today.isLeapYear();<br><br><span class="hljs-comment">// 获取当前时间</span><br><span class="hljs-type">LocalDateTime</span> <span class="hljs-variable">now</span> <span class="hljs-operator">=</span> LocalDateTime.now();<br>System.out.println(now); 	<span class="hljs-comment">//2022-04-01T11:02:32.651552600</span><br><br><span class="hljs-comment">// 设置时间</span><br><span class="hljs-type">LocalDateTime</span> <span class="hljs-variable">dateTime</span> <span class="hljs-operator">=</span> LocalDateTime.of(<span class="hljs-number">2022</span>, <span class="hljs-number">4</span>, <span class="hljs-number">1</span>, <span class="hljs-number">11</span>, <span class="hljs-number">11</span>, <span class="hljs-number">11</span>);<br>System.out.println(dateTime);				<span class="hljs-comment">//2022-04-01T11:11:11</span><br><span class="hljs-comment">// 获取年、月、日、时、分、秒</span><br>dateTime.getYear(); <span class="hljs-comment">// dateTime.get(ChronoField.YEAR);</span><br>dateTime.getMonth().getValue(); <span class="hljs-comment">// dateTime.get(ChronoField.MONTH_OF_YEAR);</span><br>dateTime.getDayOfMonth(); <span class="hljs-comment">// dateTime.get(ChronoField.DAY_OF_MONTH);</span><br>dateTime.getHour();<br>dateTime.getMinute();<br>dateTime.getSecond();<br><br><span class="hljs-comment">// 调整日期/时间，返回修改了属性的新对象</span><br>System.out.println(dateTime.withDayOfMonth(<span class="hljs-number">25</span>)); <br><span class="hljs-comment">//也可用 dateTime.with(ChronoField.DAY_OF_MONTH, 25) , 输出 2022-04-25T11:11:11 </span><br><br><span class="hljs-comment">// 当月的最后一天</span><br>dateTime.with(TemporalAdjusters.lastDayOfMonth()); 	<span class="hljs-comment">//2022-04-30T11:11:11</span><br><br><span class="hljs-comment">// 比较先后</span><br>System.out.println(dateTime.isAfter(now));		<span class="hljs-comment">//false</span><br>System.out.println(dateTime.isBefore(now));		<span class="hljs-comment">//true</span><br><br><span class="hljs-comment">// 加减时间</span><br>System.out.println(dateTime.plusDays(<span class="hljs-number">1</span>));	<span class="hljs-comment">// dateTime.plus(1, ChronoUnit.DAYS);</span><br>System.out.println(dateTime.minusDays(<span class="hljs-number">1</span>));<br><span class="hljs-comment">/*</span><br><span class="hljs-comment">2022-04-02T11:11:11</span><br><span class="hljs-comment">2022-03-31T11:11:11</span><br><span class="hljs-comment">*/</span><br><span class="hljs-comment">// 格式化</span><br><span class="hljs-type">DateTimeFormatter</span> <span class="hljs-variable">formatter</span> <span class="hljs-operator">=</span> DateTimeFormatter.ofPattern(<span class="hljs-string">&quot;yyyy-MM-dd HH:mm:ss&quot;</span>);<br>System.out.println(<span class="hljs-string">&#x27;\n&#x27;</span> + formatter.format(now) + <span class="hljs-string">&#x27;\n&#x27;</span>);<br><span class="hljs-comment">//输出 2022-04-01 11:55:39 , 需导入 java.time.format.DateTimeFormatter 包</span><br><br><span class="hljs-comment">// LocalDateTime 转 String</span><br>formatter.format(now); <span class="hljs-comment">// now.format(formatter);</span><br>System.out.println(formatter.format(now).getClass());<br><span class="hljs-comment">//输出 class java.lang.String</span><br><br><span class="hljs-comment">// String 转 LocalDateTime</span><br>LocalDateTime.parse(<span class="hljs-string">&quot;2022-04-01 23:59:59&quot;</span>, formatter);<br><br><span class="hljs-comment">// LocalDateTime 转 LocalDate、LocalTime</span><br><span class="hljs-type">LocalDate</span> <span class="hljs-variable">localDate</span> <span class="hljs-operator">=</span> dateTime.toLocalDate();<br><span class="hljs-type">LocalTime</span> <span class="hljs-variable">localTime</span> <span class="hljs-operator">=</span> dateTime.toLocalTime();<br><br>System.out.println(localDate);	<span class="hljs-comment">//2022-04-01</span><br>System.out.println(localTime);	<span class="hljs-comment">//11:11:11</span><br><br><span class="hljs-comment">// LocalDate、LocalTime 转 LocalDateTime</span><br><span class="hljs-type">LocalDateTime</span> <span class="hljs-variable">localDateTime1</span> <span class="hljs-operator">=</span> localDate.atStartOfDay();<br><span class="hljs-type">LocalDateTime</span> <span class="hljs-variable">localDateTime2</span> <span class="hljs-operator">=</span> LocalDateTime.of(localDate, localTime);<br><br><span class="hljs-comment">// 获取当前时间戳</span><br><span class="hljs-type">long</span> <span class="hljs-variable">millisecond</span> <span class="hljs-operator">=</span> Instant.now().toEpochMilli(); <br>	<span class="hljs-comment">// 自1970-01-01T00：00：00Z 时代以来的毫秒数, 转换当前时间的毫秒值</span><br><span class="hljs-type">long</span> <span class="hljs-variable">second</span> <span class="hljs-operator">=</span> Instant.now().getEpochSecond();<br>	<span class="hljs-comment">// 返回 1970-01-01T00：00：00Z 时代的秒数。</span><br>Instant.ofEpochMilli(millisecond); 	<span class="hljs-comment">// 2022-04-01T07:55:23.808Z 毫秒值转 Instant。</span><br><span class="hljs-comment">/*</span><br><span class="hljs-comment">    测试时，发现 Instant.now() 返回的时间戳与北京时间相差8小时。考虑调用的是jvm时间，而jvm使用的时间默认是 0 时区的时间，但以 TimeZone.setDefault(TimeZone.getTimeZone(&quot;GMT+8&quot;)) 测试后，通过输出new Date（）发现jvm时间已改变，但 Instant.now() 返回的时间仍然相差 8 小时。</span><br><span class="hljs-comment">    阅读源码发现, Instant.now() 使用的是 Clock.systemUTC().instant() 即 UTC 时间, 正好与北京时间相差 8 小时(找了些资料才知道，末尾的 Z 表示这是一个世界标准时间, 即UTC)。解决方法：通过 Instant.now().plusMillis(TimeUnit.HOURS.toMillis(8)) 加上8小时。或 Instant.now().atZone(ZoneId.systemDefault()) 使用当前时区（这里返回的值是 ZonedDateTime 类型)。</span><br><span class="hljs-comment">    小结：Instant.now() 适用于需要获取不带日期或时间的当前时刻</span><br><span class="hljs-comment">    */</span><br><br><span class="hljs-comment">// 将日期转换为从 1970-01-01 开始的天数</span><br>System.out.println(today.toEpochDay() + <span class="hljs-string">&quot; 天&quot;</span>);		<span class="hljs-comment">//19083 天。 </span><br><br><span class="hljs-comment">// 将此日期时间转换为从 1970-01-01T00：00：00Z 开始的秒数</span><br>dateTime.toInstant(ZoneOffset.of(<span class="hljs-string">&quot;+8&quot;</span>)).toEpochMilli();	<span class="hljs-comment">//1648782671000</span><br><br><span class="hljs-comment">// LocalDateTime 转换为 ZonedDateTime，再转换为 Instant，再转换为 Date</span><br>        <span class="hljs-type">Date</span> <span class="hljs-variable">date</span> <span class="hljs-operator">=</span> Date.from(dateTime.atZone(ZoneId.systemDefault()).toInstant());<br><span class="hljs-comment">// Date 转换为 Instant，再转换为 LocalDateTime</span><br>        <span class="hljs-type">LocalDateTime</span> <span class="hljs-variable">localDateTime</span> <span class="hljs-operator">=</span> LocalDateTime.ofInstant(date.toInstant(), ZoneId.systemDefault());<br><br><span class="hljs-comment">/* // 获取相差时间间隔</span><br><span class="hljs-comment">amount = start.until(end, ChronoUnit.DAYS); // end.toEpochDay() - start.toEpochDay()</span><br><span class="hljs-comment">amount = ChronoUnit.DAYS.between(start, end);</span><br><span class="hljs-comment">*/</span><br><br><span class="hljs-comment">// 时间长度：Duration、Period</span><br><span class="hljs-type">LocalDate</span> <span class="hljs-variable">localDate1</span> <span class="hljs-operator">=</span> LocalDate.of(<span class="hljs-number">1970</span>, <span class="hljs-number">1</span>, <span class="hljs-number">1</span>);<br>        <span class="hljs-type">LocalDate</span> <span class="hljs-variable">localDate2</span> <span class="hljs-operator">=</span> LocalDate.of(<span class="hljs-number">2022</span>, <span class="hljs-number">4</span>, <span class="hljs-number">1</span>);<br>        <span class="hljs-type">Period</span> <span class="hljs-variable">p</span> <span class="hljs-operator">=</span> Period.between(localDate1, localDate2);<br>        System.out.println(<span class="hljs-string">&quot;years:&quot;</span>+p.getYears()+<span class="hljs-string">&quot; months:&quot;</span>+p.getMonths()+<span class="hljs-string">&quot; days:&quot;</span>+p.getDays());<span class="hljs-comment">//years:52 months:3 days:0</span><br><br>        <span class="hljs-type">LocalDateTime</span> <span class="hljs-variable">localDateTime1</span> <span class="hljs-operator">=</span> LocalDateTime.of(<span class="hljs-number">1970</span>, <span class="hljs-number">1</span>, <span class="hljs-number">1</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>);<br>        <span class="hljs-type">LocalDateTime</span> <span class="hljs-variable">localDateTime2</span> <span class="hljs-operator">=</span> LocalDateTime.of(<span class="hljs-number">2022</span>, <span class="hljs-number">4</span>, <span class="hljs-number">1</span>, <span class="hljs-number">22</span>, <span class="hljs-number">04</span>);<br>        <span class="hljs-type">Duration</span> <span class="hljs-variable">d</span> <span class="hljs-operator">=</span> Duration.between(localDateTime1, localDateTime2);<br>        System.out.println(<span class="hljs-string">&quot;days:&quot;</span>+d.toDays());<br>        System.out.println(<span class="hljs-string">&quot;hours:&quot;</span>+d.toHours());<br>        System.out.println(<span class="hljs-string">&quot;minutes:&quot;</span>+d.toMinutes());<br>        System.out.println(<span class="hljs-string">&quot;millis:&quot;</span>+d.toMillis());<br><span class="hljs-comment">//days:19083 hours:458014 minutes:27480844 millis:1648850640000</span><br><span class="hljs-comment">//Period只能返回年数，月数，天数；Duration可以返回天数，小时数，分钟数，毫秒数等。</span><br><br><br><span class="hljs-comment">//时区 ID</span><br><span class="hljs-comment">//ZoneId zoneId = ZoneId.systemDefault();		//系统默认时区。Asia/Shanghai</span><br><span class="hljs-comment">//ZoneId zoneId = TimeZone.getDefault().toZoneId();	//Asia/Shanghai</span><br><span class="hljs-comment">//ZoneId romeZone = ZoneId.of(&quot;Asia/Shanghai&quot;);		//Asia/Shanghai</span><br><br><span class="hljs-comment">//zoneId.getId(); // 时区 ID：Asia/Shanghai</span><br><span class="hljs-comment">//zoneId.getRules(); // 时区规则：ZoneRules[currentStandardOffset=+08:00]</span><br><br><span class="hljs-type">ZoneId</span> <span class="hljs-variable">zoneId</span> <span class="hljs-operator">=</span> ZoneId.of(<span class="hljs-string">&quot;UTC+8&quot;</span>);<br><span class="hljs-type">ZonedDateTime</span> <span class="hljs-variable">zonedDateTime</span> <span class="hljs-operator">=</span> ZonedDateTime.of(<span class="hljs-number">2022</span>, <span class="hljs-number">4</span>, <span class="hljs-number">1</span>, <span class="hljs-number">23</span>, <span class="hljs-number">59</span>, <span class="hljs-number">59</span>, <span class="hljs-number">1234</span>, zoneId);<br>System.out.println(zoneId);			<span class="hljs-comment">//UTC+08:00</span><br>System.out.println(zonedDateTime);	<span class="hljs-comment">//2022-04-01T23:59:59.000001234+08:00[UTC+08:00]</span><br><br><span class="hljs-comment">// 为时间点添加时区信息</span><br>        <span class="hljs-type">ZonedDateTime</span> <span class="hljs-variable">zdt1</span> <span class="hljs-operator">=</span> localDate.atStartOfDay(zoneId); <span class="hljs-comment">// 时间为 00:00:00。2022-04-01T00:00+08:00[UTC+08:00]</span><br>        <span class="hljs-type">ZonedDateTime</span> <span class="hljs-variable">zdt2</span> <span class="hljs-operator">=</span> dateTime.atZone(zoneId);			<span class="hljs-comment">//2022-04-01T11:11:11+08:00[UTC+08:00]</span><br>        <span class="hljs-type">ZonedDateTime</span> <span class="hljs-variable">zdt3</span> <span class="hljs-operator">=</span> Instant.now().atZone(zoneId);		<span class="hljs-comment">//2022-04-01T11:11:11+08:00[UTC+08:00]</span><br></code></pre></td></tr></table></figure>
+
+<p>​</p>
+</li>
+</ul>
+<h1 id="Annotations-注解"><a href="#Annotations-注解" class="headerlink" title="Annotations(注解)"></a>Annotations(注解)</h1><h2 id="类型注解"><a href="#类型注解" class="headerlink" title="类型注解"></a>类型注解</h2><ul>
+<li>从 Java 8 开始，注解已经能应用于任何类型，包括 new 操作符、类型转换、instanceof 检查、泛型类型参数，以及 implements 和 throws 子句</li>
+</ul>
+<h2 id="多重注解（重复注解）"><a href="#多重注解（重复注解）" class="headerlink" title="多重注解（重复注解）"></a>多重注解（重复注解）</h2><p>Java 8允许我们把同一个类型的注解使用多次，只需要给该注解标注一下 <code>@Repeatable</code> 即可。</p>
+<p>定义一个包装类Hints注解用来放置一组具体的Hint注解：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-meta">@Retention(RetentionPolicy.RUNTIME)</span><br><span class="hljs-meta">@interface</span> Hints &#123;<br>    Hint[] value();<br>&#125;<br><span class="hljs-meta">@Repeatable(Hints.class)</span><br><span class="hljs-meta">@interface</span> Hint &#123;<br>    String <span class="hljs-title function_">value</span><span class="hljs-params">()</span>;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>例 1: 使用包装类当容器来存多个注解（老方法）</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-meta">@Hints(&#123;@Hint(&quot;hint1&quot;), @Hint(&quot;hint2&quot;)&#125;)</span><br><span class="hljs-keyword">class</span> <span class="hljs-title class_">Person</span> &#123;&#125;<br></code></pre></td></tr></table></figure>
+
+<p>例 2：使用多重注解（新方法）</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-meta">@Hint(&quot;hint1&quot;)</span><br><span class="hljs-meta">@Hint(&quot;hint2&quot;)</span><br><span class="hljs-keyword">class</span> <span class="hljs-title class_">Person</span> &#123;&#125;<br></code></pre></td></tr></table></figure>
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/" class="category-chain-item">编程语言</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/Java/">#Java</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>java 8 新特性</div>
+      <div>http://example.com/2022/03/29/java-8-新特性/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>John Doe</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2022年3月29日</div>
+        </div>
+      
+      
+      <div class="license-meta-item">
+        <div>许可协议</div>
+        <div>
+          
+            
+            
+              <a target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+              <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                <i class="iconfont icon-by"></i>
+              </span>
+              </a>
+            
+          
+        </div>
+      </div>
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2022/04/02/Redis%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4/" title="Redis 常用命令">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">Redis 常用命令</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2022/03/27/Java%E5%9F%BA%E7%A1%80-%E5%A4%9A%E7%BA%BF%E7%A8%8B/" title="Java 多线程">
+                        <span class="hidden-mobile">Java 多线程</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;目录</p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.0/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.18.2/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      headingSelector : CONFIG.toc.headingSelector || 'h1,h2,h3,h4,h5,h6',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      collapseDepth   : CONFIG.toc.collapseDepth || 0,
+      scrollSmooth    : true,
+      headingsOffset  : -boardTop
+    });
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.10/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>

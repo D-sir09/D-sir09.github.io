@@ -1,0 +1,919 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
+  <link rel="icon" href="/img/fluid.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="John Doe">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="启动Redis服务端 redis-server  启动Redis客户端 redis-cli redis-cli –raw 支持中文的启动方式    Redis基本操作 ping 测试与redis服务器是否联通, 若联通, 返回 pong  select (选择数据库进入) 可选 0 ~ 15  如, select 0 即进入 0 号数据库 登录Redis客户端后, 若没有做 select 操作,">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Redis 常用命令">
+<meta property="og:url" content="http://example.com/2022/04/02/Redis%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="启动Redis服务端 redis-server  启动Redis客户端 redis-cli redis-cli –raw 支持中文的启动方式    Redis基本操作 ping 测试与redis服务器是否联通, 若联通, 返回 pong  select (选择数据库进入) 可选 0 ~ 15  如, select 0 即进入 0 号数据库 登录Redis客户端后, 若没有做 select 操作,">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2022-04-02T09:33:20.000Z">
+<meta property="article:modified_time" content="2022-07-23T00:42:38.327Z">
+<meta property="article:author" content="John Doe">
+<meta property="article:tag" content="Redis">
+<meta name="twitter:card" content="summary_large_image">
+  
+  
+  
+  <title>Redis 常用命令 - Hexo</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"example.com","root":"/","version":"1.9.2","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 6.1.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Fluid</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                首页
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                归档
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                分类
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                标签
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                关于
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              &nbsp;<i class="iconfont icon-search"></i>&nbsp;
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">&nbsp;<i
+                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="Redis 常用命令"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2022-04-02 17:33" pubdate>
+          2022年4月2日 下午
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          3.7k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          31 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">Redis 常用命令</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h1 id="启动Redis服务端"><a href="#启动Redis服务端" class="headerlink" title="启动Redis服务端"></a><strong>启动Redis服务端</strong></h1><ul>
+<li>redis-server</li>
+</ul>
+<h1 id="启动Redis客户端"><a href="#启动Redis客户端" class="headerlink" title="启动Redis客户端"></a><strong>启动Redis客户端</strong></h1><ul>
+<li>redis-cli</li>
+<li>redis-cli –raw<ul>
+<li>支持中文的启动方式</li>
+</ul>
+</li>
+</ul>
+<h1 id="Redis基本操作"><a href="#Redis基本操作" class="headerlink" title="Redis基本操作"></a><strong>Redis基本操作</strong></h1><ul>
+<li>ping</li>
+<li>测试与redis服务器是否联通, 若联通, 返回 pong </li>
+<li>select (选择数据库进入)<ul>
+<li>可选 0 ~ 15 </li>
+<li>如, select 0 即进入 0 号数据库</li>
+<li>登录Redis客户端后, 若没有做 select 操作, 默认选择 0 号数据库</li>
+</ul>
+</li>
+</ul>
+<h1 id="Redis的数据类型"><a href="#Redis的数据类型" class="headerlink" title="Redis的数据类型"></a>Redis的数据类型</h1><ul>
+<li>Redis 保存的数据都是按照 <strong>键值对</strong> 来保存的</li>
+<li><strong>键</strong> 的数据类型都是字符串</li>
+<li><strong>值</strong> 的数据类型有以下五种<ul>
+<li>字符串 (string)</li>
+<li>哈希 (hash)</li>
+<li>列表 (list)</li>
+<li>无序集合 (set)</li>
+<li>有序集合 (zset)</li>
+</ul>
+</li>
+</ul>
+<h1 id="字符串（string）操作"><a href="#字符串（string）操作" class="headerlink" title="字符串（string）操作"></a>字符串（string）操作</h1><p><strong>string</strong> 是 redis 最基本的类型，它是一种安全的二进制字符串。一个 key 对应一个 value。value 的最大值是 <strong>512M</strong></p>
+<h2 id="添加修改值"><a href="#添加修改值" class="headerlink" title="添加修改值"></a>添加修改值</h2><ul>
+<li>set 键 值 <ul>
+<li>如: set user1 aaa 。 意为设置一个名为 user1 的键,  其值为 aaa</li>
+</ul>
+</li>
+<li>setex 键  过期时间 值<ul>
+<li>过期时间单位为秒</li>
+<li>如: setex user2 3 bbb 。意为设置一个名为 user2 的键，值为 bbb ，过期时间为 3 秒。</li>
+</ul>
+</li>
+<li>mset 键1 值1 键2 值2<ul>
+<li>同时添加多个键值对</li>
+<li>如：mset user3 ccc user4 ddd user5 eee</li>
+</ul>
+</li>
+<li>追加键值<ul>
+<li>append 键 值</li>
+<li>如 ：append user1 haha 。给user1键的 <strong>值</strong> 追加 ‘haha’  , 返回值即为值的大小。</li>
+</ul>
+</li>
+</ul>
+<h2 id="获取值"><a href="#获取值" class="headerlink" title="获取值"></a>获取值</h2><ul>
+<li>get 键<ul>
+<li>如：get user1 。获取 user1 键的值。 输出为 aaahaha</li>
+<li>不存在的键，get 后会返回 nil</li>
+</ul>
+</li>
+<li>mget 键1 键2 键n …<ul>
+<li>获取多个值。如 mget user1 user2 user3。</li>
+</ul>
+</li>
+</ul>
+<h2 id="删除"><a href="#删除" class="headerlink" title="删除"></a>删除</h2><ul>
+<li>del 键1 键2 键n …<ul>
+<li>如: del user1 user2 user3 。 删除 user1, user2, user3 键。</li>
+<li>删除键会连值一起删去。</li>
+</ul>
+</li>
+</ul>
+<h1 id="键相关操作"><a href="#键相关操作" class="headerlink" title="键相关操作"></a>键相关操作</h1><h2 id="查找"><a href="#查找" class="headerlink" title="查找"></a>查找</h2><ul>
+<li><p>keys 键名</p>
+<ul>
+<li><p>查找对应的键， 若存在，返回查找的键名， 若不存在，返回空。</p>
+</li>
+<li><p>可以使用 keys * 查看所有键。</p>
+<figure class="highlight awk"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs awk">mset user1 aaa user2 bbb user3 ccc<br>keys user1	<span class="hljs-regexp">//</span>输出 user1<br>keys user10 <span class="hljs-regexp">//</span>无输出<br>keys *		<span class="hljs-regexp">//</span>输出所有键, 即 user1 user2 user3 。同 keys <span class="hljs-string">&#x27;*&#x27;</span><br>keys *s*	<span class="hljs-regexp">//</span>输出名称包含s的键, 即 user1 user2 user3 。同keys <span class="hljs-string">&#x27;*s*&#x27;</span><br></code></pre></td></tr></table></figure></li>
+</ul>
+</li>
+</ul>
+<h2 id="判断键是否存在"><a href="#判断键是否存在" class="headerlink" title="判断键是否存在"></a>判断键是否存在</h2><ul>
+<li>exists 键名<ul>
+<li>若存在，则返回1；不存在，则返回0</li>
+<li>exists user1。返回1</li>
+</ul>
+</li>
+</ul>
+<h2 id="查看键对应的值类型"><a href="#查看键对应的值类型" class="headerlink" title="查看键对应的值类型"></a>查看键对应的值类型</h2><ul>
+<li>type 键名<ul>
+<li>如：type user1。返回string。</li>
+</ul>
+</li>
+</ul>
+<h2 id="设置键的过期时间"><a href="#设置键的过期时间" class="headerlink" title="设置键的过期时间"></a>设置键的过期时间</h2><ul>
+<li>expire 键名 秒数<ul>
+<li>为已有的键设置过期时间。与 setex 的区别在于，setex 是在创建键时设置的，而expire则可以为已有的键设置，却不能创建键。</li>
+<li>若存在这个键名，则 expire 返回 1 ，否则返回 0 。</li>
+<li>如：expire user1 10 。 返回1 ，10秒后，输入 keys * ，发现输出的键名无 user1 。</li>
+</ul>
+</li>
+</ul>
+<h2 id="查看键的有效时间"><a href="#查看键的有效时间" class="headerlink" title="查看键的有效时间"></a>查看键的有效时间</h2><ul>
+<li>ttl 键名<ul>
+<li>返回值大于0，代表存在有效时间，且 返回的值即为剩余有效时间，单位：秒。</li>
+<li>返回值为 -1 ，表示永远有效。</li>
+<li>返回值为 -2 ， 表示键不存在</li>
+</ul>
+</li>
+</ul>
+<h1 id="哈希-hash"><a href="#哈希-hash" class="headerlink" title="哈希 (hash)"></a>哈希 (hash)</h1><h2 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h2><ul>
+<li>hash 用于存储 “键值对” 的集合;</li>
+<li>每个 hash 中的键可以理解为字段 (field), 一个字段 (field) 对应一个值 (value) .</li>
+<li>hash 中值 (value) 类型为**字符串(string)**。</li>
+<li>同一个 hash 中字段名不可重复。</li>
+</ul>
+<h2 id="添加值"><a href="#添加值" class="headerlink" title="添加值"></a>添加值</h2><ul>
+<li>hset 键 字段 值<ul>
+<li>如：hset huser1 name tom 。添加一个键 ’huser1‘ ，字段为 ’name‘ ， 值为 ’tom‘ 。</li>
+<li>使用 type huser1 可发现, 返回值为 hash</li>
+<li>输入key *  ，可发现键中多了huser1。</li>
+</ul>
+</li>
+</ul>
+<h2 id="添加多个值"><a href="#添加多个值" class="headerlink" title="添加多个值"></a>添加多个值</h2><ul>
+<li>hmset 键 字段1 值1 字段2 值2 …<ul>
+<li>hmset huser2 name mary sex female (添加一个 humer2 键,  带有2个字段)</li>
+</ul>
+</li>
+</ul>
+<h2 id="获取字段"><a href="#获取字段" class="headerlink" title="获取字段"></a>获取字段</h2><ul>
+<li>hkeys 键<ul>
+<li>获取指定键的所有 <strong>字段名</strong></li>
+<li>如：hkeys huser1。返回 name 。hkeys huser2 。返回 name sex。</li>
+</ul>
+</li>
+</ul>
+<h2 id="获取字段的值"><a href="#获取字段的值" class="headerlink" title="获取字段的值"></a>获取字段的值</h2><ul>
+<li>hget 键 字段名<ul>
+<li>获取字段对应的值</li>
+<li>如： hget huser1 name。输出 tom 。</li>
+</ul>
+</li>
+</ul>
+<h2 id="获取多个字段的值"><a href="#获取多个字段的值" class="headerlink" title="获取多个字段的值"></a>获取多个字段的值</h2><ul>
+<li>hmget 键 字段1 字段2 …<ul>
+<li>如: hmget huser2 name sex 。输出 mary female。</li>
+</ul>
+</li>
+</ul>
+<h2 id="获取所有字段的值"><a href="#获取所有字段的值" class="headerlink" title="获取所有字段的值"></a>获取所有字段的值</h2><ul>
+<li>hvals 键名<ul>
+<li>如：hvals huser2 。输出 mary female。</li>
+</ul>
+</li>
+</ul>
+<h2 id="输出所有字段的名及值"><a href="#输出所有字段的名及值" class="headerlink" title="输出所有字段的名及值"></a>输出所有字段的名及值</h2><ul>
+<li>hgetall 键<ul>
+<li>如：hgetall huser2。输出 name Mary sex female。</li>
+</ul>
+</li>
+</ul>
+<h2 id="删除-1"><a href="#删除-1" class="headerlink" title="删除"></a>删除</h2><ul>
+<li>hdel 键名 字段名<ul>
+<li>如：hdel huser2  sex。输出  1，删除成功；再次输入hdel huser2 sex，输出 0 ，意为找不到此字段。</li>
+<li>删除键中的最后一个字段, 键也会删除。</li>
+<li>只能删除字段，不能删除键，想删除键须用 <strong>del</strong> 。</li>
+</ul>
+</li>
+</ul>
+<h1 id="列表（list）"><a href="#列表（list）" class="headerlink" title="列表（list）"></a>列表（list）</h1><ul>
+<li>列表中每个键有多个值</li>
+<li>列表可以从左侧添加值，也可以从右侧添加值</li>
+<li>又称双端队列</li>
+</ul>
+<h2 id="添加值-1"><a href="#添加值-1" class="headerlink" title="添加值"></a>添加值</h2><ul>
+<li>从列表左侧添加值<ul>
+<li>lpush 键名 值1 值2 …<ul>
+<li>如:  lpush luser1 aa 。从键 ’luser1‘ 列表的左侧加入值 ’aa’ 。</li>
+<li>自动创建键名，若键名已存在，且为 list 类型，则添加值，并返回列表中当前存在的值的数量；若键名存在，但不是list类型，则报错。</li>
+<li>若插入多个值, 如: lpush luser1 1 2 3 , 则后一个值在列表的靠前位置, 即 3 在列表开头, 然后是 2 ,再然后是 1 。</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>从列表右侧添加值<ul>
+<li>rpush 键名 值1 值2 …<ul>
+<li>如：rpush luser1 bb 。从键 ’luser1‘ 列表的右侧加入值 ’bb’。</li>
+<li>同样可以自动创建键名，若键名已存在，且为 list 类型，则添加值，并返回列表中当前存在的值的数量；若键名存在，但不是list类型，则报错。</li>
+<li>如：rpush luser1 cc dd。返回值为4，即列表中当前存在的值的数量。</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="插入值"><a href="#插入值" class="headerlink" title="插入值"></a>插入值</h2><ul>
+<li>linsert 键 before 或者 after 值<ul>
+<li>在指定的值前面或后面插入新值</li>
+<li>如: linsert luser1 before cc 11 。在 cc 前面插入值 11 。</li>
+<li>linsert luser1 after cc 22 。在 cc 后面插入值 22 。</li>
+</ul>
+</li>
+</ul>
+<h2 id="获取值-1"><a href="#获取值-1" class="headerlink" title="获取值"></a>获取值</h2><ul>
+<li>lrange 键名 start stop<ul>
+<li>start 代表开始索引</li>
+<li>stop代表结束索引</li>
+<li>第一个值的索引为 0 ，最后一个值的索引为 -1 。</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight tcl"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs tcl"><span class="hljs-keyword">lrange</span> luser1 <span class="hljs-number">0</span> <span class="hljs-number">-1</span> // 获取 luser1 列表中的所有值<br><span class="hljs-keyword">lrange</span> luser1 <span class="hljs-number">2</span> <span class="hljs-number">-1</span> // 从第三个元素开始获取到最后一个值<br></code></pre></td></tr></table></figure>
+
+<h2 id="修改值"><a href="#修改值" class="headerlink" title="修改值"></a>修改值</h2><ul>
+<li>lset 键名 索引 值<ul>
+<li>如： lset luser1 1 china。 把 luser1 键的第二个元素改为china（修改最后一个元素，索引值改为 -1 即可）。</li>
+</ul>
+</li>
+</ul>
+<h2 id="删除值"><a href="#删除值" class="headerlink" title="删除值"></a>删除值</h2><ul>
+<li>lrem 键名 count 值<ul>
+<li>count &#x3D; 0 ,删除指定的所有值。</li>
+<li>count &lt; 0 , 从右往左删除指定数量的值。</li>
+<li>count &gt; 0 , 从左往右删除指定数量的值。</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight awk"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs awk">lrem luser1 -<span class="hljs-number">1</span> aa 	<span class="hljs-regexp">//</span>从右往左数, 删除一个 aa<br>lrem luser1 <span class="hljs-number">0</span> aa	<span class="hljs-regexp">//</span>删除所有 aa <br></code></pre></td></tr></table></figure>
+
+<h1 id="无序集合-set"><a href="#无序集合-set" class="headerlink" title="无序集合(set)"></a>无序集合(set)</h1><ul>
+<li>不关注顺序</li>
+<li>值不允许重复</li>
+</ul>
+<h2 id="添加值-2"><a href="#添加值-2" class="headerlink" title="添加值"></a>添加值</h2><ul>
+<li>sadd 键名 值1 值2 值3 <ul>
+<li>如 : sadd suser1 aa bb cc 。给一个名为 suser1 的键添加值 ’aa‘ ， ’bb‘ ，’cc‘， 若无此键，则建立一个新的；若有，但不是 set 类型 ，报错，若是 set 类型，则加入集合内（重复值无法加入），返回值为成功加入集合的值的数量。</li>
+<li>集合里不允许有重复值。</li>
+<li>集合里的值不能修改，只能添加和删除。</li>
+<li>值的类型为 string。</li>
+</ul>
+</li>
+</ul>
+<h2 id="删除值-1"><a href="#删除值-1" class="headerlink" title="删除值"></a>删除值</h2><ul>
+<li>srem 键名 值名<ul>
+<li>如：srem suser1 cc。删除 suser1 键指定的值</li>
+</ul>
+</li>
+</ul>
+<h2 id="获取值-2"><a href="#获取值-2" class="headerlink" title="获取值"></a>获取值</h2><ul>
+<li>smembers 键名<ul>
+<li>如：smembers suser1。返回键 suser1 的所有值</li>
+</ul>
+</li>
+</ul>
+<h1 id="有序集合-zset"><a href="#有序集合-zset" class="headerlink" title="有序集合(zset)"></a>有序集合(zset)</h1><ul>
+<li>集合里不允许有重复的值</li>
+<li>有序集合里的值只能添加和删除，不能修改</li>
+<li>有序集合中 <strong>值(value)</strong> 的类型为 <strong>字符串(string)</strong></li>
+<li>每个值都会关联一个 <strong>分数(score)</strong> , 可以为负数, 通过 score 将值从小到大排序</li>
+</ul>
+<h2 id="添加值-3"><a href="#添加值-3" class="headerlink" title="添加值"></a>添加值</h2><ul>
+<li>zadd 键名 score1 值1 score2 值2<ul>
+<li>如: zadd zuser1 1 aa 3 dd 5 ee 2 cc 。返回值为成功添加的值的数量，且添加的值会自动排序。</li>
+</ul>
+</li>
+</ul>
+<h2 id="删除值-2"><a href="#删除值-2" class="headerlink" title="删除值"></a>删除值</h2><p><strong>通过键</strong></p>
+<ul>
+<li>zrem 键 zuser1 dd，删除 zuser1 的 dd ，删除成功则返回 1 。</li>
+</ul>
+<p><strong>通过 score 删除值</strong></p>
+<ul>
+<li>zremrangebyscore 键名 min max<ul>
+<li>min 为删除 score 的最小值，max 为要删除 score 的最大值。</li>
+<li>如：zremrangebyscore zuser1 0 10，删除 score 为 0 至10 之间的值，输出删除掉的值的个数。</li>
+<li>删除所有值后，键将自动删除。</li>
+</ul>
+</li>
+</ul>
+<h2 id="获取值-3"><a href="#获取值-3" class="headerlink" title="获取值"></a>获取值</h2><ul>
+<li>zrange 键名 start stop [withscores]<ul>
+<li>start 从 0 开始, 最后一个元素的索引为 -1</li>
+<li>withscores 代表同时获取 score<ul>
+<li>如 : zrange zuser1 0 -1 withscores 。获取 zuser1 的所有元素，并获取 score。输出aa<br>1 cc 2 dd 3 ee 5</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>通过 score 获取值<ul>
+<li>zrangebyscore 键名 min max<ul>
+<li>min 代表 score 的起始值，max代表 score 的结束值。<ul>
+<li>zrangebyscore zuser1 2 6 ，获取 score 从 2 到 6 的值，输出 cc dd ee 。</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="通过值获取score"><a href="#通过值获取score" class="headerlink" title="通过值获取score"></a>通过值获取score</h2><ul>
+<li>zscore 键名 值<ul>
+<li>如： zscore zuser1 dd ，获取键 zuser1 的值 dd 的 score。</li>
+</ul>
+</li>
+</ul>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/%E6%95%B0%E6%8D%AE%E5%BA%93/" class="category-chain-item">数据库</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/Redis/">#Redis</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>Redis 常用命令</div>
+      <div>http://example.com/2022/04/02/Redis常用命令/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>John Doe</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2022年4月2日</div>
+        </div>
+      
+      
+      <div class="license-meta-item">
+        <div>许可协议</div>
+        <div>
+          
+            
+            
+              <a target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+              <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                <i class="iconfont icon-by"></i>
+              </span>
+              </a>
+            
+          
+        </div>
+      </div>
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2022/04/05/Java-%E9%9B%86%E5%90%88%E7%B1%BB-Collection/" title="Java 集合类-Collection">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">Java 集合类-Collection</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2022/03/29/java-8-%E6%96%B0%E7%89%B9%E6%80%A7/" title="java 8 新特性">
+                        <span class="hidden-mobile">java 8 新特性</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;目录</p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.0/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.18.2/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      headingSelector : CONFIG.toc.headingSelector || 'h1,h2,h3,h4,h5,h6',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      collapseDepth   : CONFIG.toc.collapseDepth || 0,
+      scrollSmooth    : true,
+      headingsOffset  : -boardTop
+    });
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.10/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>
