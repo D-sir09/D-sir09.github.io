@@ -24,7 +24,7 @@
 <meta property="og:description" content="slice一个 slice（切片）有三个基本属性：data，len，cap 分别代表切片里含有的元素，切片的长度、容量。 1234567891011121314151617&#x2F;&#x2F;创建切片var ints []int &#x3D; make([]int,2,5)ints &#x3D; append(ints,1) 	&#x2F;&#x2F;附加元素 ‘1‘ 于 ints 后，既 int[2]ints[0] &#x3D; 1&#x2F;&#x2F;此时变量 ints 中：">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2022-11-08T12:05:48.000Z">
-<meta property="article:modified_time" content="2022-11-14T10:21:42.307Z">
+<meta property="article:modified_time" content="2022-11-15T16:40:08.149Z">
 <meta property="article:author" content="John Doe">
 <meta property="article:tag" content="golang">
 <meta name="twitter:card" content="summary_large_image">
@@ -219,7 +219,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          4.8k 字
+          5.4k 字
         
       </span>
     
@@ -230,7 +230,7 @@
         
         
         
-          41 分钟
+          45 分钟
         
       </span>
     
@@ -322,9 +322,22 @@
 <figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><code class="hljs go"><span class="hljs-comment">//定义一个接口，和使用此接口作为参数的函数：</span><br><span class="hljs-keyword">type</span> IGreeting <span class="hljs-keyword">interface</span> &#123;<br>	sayHello()<br>&#125;<br><br><span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-title">sayHello</span><span class="hljs-params">(i IGreeting)</span></span> &#123;<br>	i.sayHello()<br>&#125;<br><br><span class="hljs-comment">//定义结构体，实现接口的函数</span><br><span class="hljs-keyword">type</span> Go <span class="hljs-keyword">struct</span> &#123;&#125;<br><span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-params">(g Go)</span></span> sayHello() &#123;<br>	fmt.Println(<span class="hljs-string">&quot;Hi, I am GO!&quot;</span>)<br>&#125;<br><br><span class="hljs-keyword">type</span> PHP <span class="hljs-keyword">struct</span> &#123;&#125;<br><span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-params">(p PHP)</span></span> sayHello() &#123;<br>	fmt.Println(<span class="hljs-string">&quot;Hi, I am PHP!&quot;</span>)<br>&#125;<br><br><span class="hljs-comment">//运行</span><br><span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-title">main</span><span class="hljs-params">()</span></span> &#123;<br>	golang := Go&#123;&#125;<br>	php := PHP&#123;&#125;<br><br>	sayHello(golang)	<br>	sayHello(php)<br>    <span class="hljs-comment">/* 输出</span><br><span class="hljs-comment">    	Hi, I am GO!</span><br><span class="hljs-comment">		Hi, I am PHP!</span><br><span class="hljs-comment">    */</span><br>&#125;<br></code></pre></td></tr></table></figure>
 
 <p>编译器在调用 sayHello() 函数时，会隐式地将 <code>golang, php</code> 对象转换成 IGreeting 类型，这也是静态语言的类型检查功能。这也就实现了调用 sayHello() 函数时，<code>golang, php</code> 对象虽然没有显式地声明实现了 IGreeting 类型，但是仍然能正常输出。</p>
+<p>&#x2F;&#x2F;待补充…</p>
 <h2 id="channel"><a href="#channel" class="headerlink" title="channel"></a>channel</h2><p>Go 通过 <strong>通信</strong> 共享内存，而非通过共享内存进行通信。channel</p>
 <figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs go"><span class="hljs-comment">//创建 channel,缓冲区大小为 5</span><br>ch := <span class="hljs-built_in">make</span>(<span class="hljs-keyword">chan</span> <span class="hljs-type">int</span>, <span class="hljs-number">5</span>)<br><br></code></pre></td></tr></table></figure>
 
+<p>&#x2F;&#x2F;待补充…</p>
+<h2 id="调度器"><a href="#调度器" class="headerlink" title="调度器"></a>调度器</h2><p>Go 语言中的调度器基于GPM模型</p>
+<ul>
+<li>G（goroutine）包含表示 goroutine 栈的一些字段，指示当前 goroutine 的状态，指示当前运行到的指令地址，也就是 PC 值。goroutine 的创建和销毁皆由 <code>Go runtime</code> 负责。</li>
+<li>P（Processor）维护一个处于 Runnable 状态的 <code>g</code> 队列，<code>m</code> 需要获得 <code>p</code> 才能运行 <code>g</code>。当一个线程阻塞时，和它绑定的 p 上的 goroutine 将转移到其他线程</li>
+<li>M（Machine）即内核级线程，包含正在运行的 goroutine 等字段。M 保存了自身使用的栈信息、当前正在 M 上执行的 G 信息、与之绑定的 P 信息……</li>
+</ul>
+<p>程序启动后，Go 会将每个 CPU 逻辑核心分配一个 <code>P</code>，再为每个 P 分配一个 <code>M</code>。P 和 M 创建的内核线程由操作系统调度，G 创建的用户级线程由 Go 程序调度。</p>
+<blockquote>
+<p>Runtime 会在程序启动的时候，创建 M 个线程（CPU 执行调度的单位），之后创建的 N 个 goroutine 都会依附在这 M 个线程上执行。</p>
+<p>在同一时刻，一个线程上只能跑一个 goroutine。当 goroutine 发生阻塞（例如上篇文章提到的向一个 channel 发送数据，被阻塞）时，runtime 会把当前 goroutine 调度走，让其他 goroutine 来执行。</p>
+</blockquote>
 
                 
               </div>
@@ -412,6 +425,12 @@
                 <div class="post-prevnext my-3">
                   <article class="post-prev col-6">
                     
+                    
+                      <a href="/2022/11/20/MySQL%E7%B4%A2%E5%BC%95%E5%85%A5%E9%97%A8/" title="MySQL索引入门">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">MySQL索引入门</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
                     
                   </article>
                   <article class="post-next col-6">

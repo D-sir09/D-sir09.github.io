@@ -1,0 +1,655 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
+  <link rel="icon" href="/img/fluid.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="John Doe">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="索引原理给数据库中的某一列加上索引后，可以提高查找速度。这是因为，索引将按照 B+树 数据结构来存储数据。B+树 将数据存在树的最底层，在数据量大时具有更快的查找速度。缺点是只加快了查找速度，增加、删除、插入数据的速度都是减慢了的，也因此，索引更适用于读多的场景。 MySQL 中，可以指定两个不同的引擎，它们使用的B+数结构有些许不同。  InnoDB：聚簇索引，数据和 主键索引结构 存储在一起。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="MySQL索引入门">
+<meta property="og:url" content="http://example.com/2022/11/20/MySQL%E7%B4%A2%E5%BC%95%E5%85%A5%E9%97%A8/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="索引原理给数据库中的某一列加上索引后，可以提高查找速度。这是因为，索引将按照 B+树 数据结构来存储数据。B+树 将数据存在树的最底层，在数据量大时具有更快的查找速度。缺点是只加快了查找速度，增加、删除、插入数据的速度都是减慢了的，也因此，索引更适用于读多的场景。 MySQL 中，可以指定两个不同的引擎，它们使用的B+数结构有些许不同。  InnoDB：聚簇索引，数据和 主键索引结构 存储在一起。">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2022-11-20T14:17:10.000Z">
+<meta property="article:modified_time" content="2022-11-21T08:35:59.008Z">
+<meta property="article:author" content="John Doe">
+<meta property="article:tag" content="MySQL">
+<meta name="twitter:card" content="summary_large_image">
+  
+  
+  
+  <title>MySQL索引入门 - Hexo</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"example.com","root":"/","version":"1.9.2","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 6.1.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Fluid</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                首页
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                归档
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                分类
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                标签
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                关于
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              &nbsp;<i class="iconfont icon-search"></i>&nbsp;
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">&nbsp;<i
+                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="MySQL索引入门"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2022-11-20 22:17" pubdate>
+          2022年11月20日 晚上
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          3k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          26 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">MySQL索引入门</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h2 id="索引原理"><a href="#索引原理" class="headerlink" title="索引原理"></a>索引原理</h2><p>给数据库中的某一列加上索引后，可以提高查找速度。这是因为，索引将按照 <strong>B+树</strong> 数据结构来存储数据。<strong>B+树</strong> 将数据存在树的最底层，在数据量大时具有更快的查找速度。缺点是只加快了查找速度，增加、删除、插入数据的速度都是减慢了的，也因此，索引更适用于读多的场景。</p>
+<p>MySQL 中，可以指定两个不同的引擎，它们使用的B+数结构有些许不同。</p>
+<ul>
+<li>InnoDB：聚簇索引，数据和 主键索引结构 存储在一起。MySQL5.5 后的默认索引引擎，支持事务，行级锁、外键。</li>
+<li>MyISAM：非聚簇索引，数据 和 索引结构 分开存储。也就是说，非聚簇索引查询时将比聚簇索引多查询一次。</li>
+</ul>
+<h2 id="常见的索引及其创建"><a href="#常见的索引及其创建" class="headerlink" title="常见的索引及其创建"></a>常见的索引及其创建</h2><ul>
+<li>主键索引：加速查找、不能为空、不能重复。支持多列</li>
+<li>唯一索引：加速查找、不能重复。支持多列</li>
+<li>普通索引：加速查找。支持多列</li>
+</ul>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><code class="hljs sql"><span class="hljs-comment">-- 主键和联合主键索引</span><br><span class="hljs-keyword">create</span> <span class="hljs-keyword">table</span> TableName (<br>	id <span class="hljs-type">int</span> <span class="hljs-keyword">not</span> <span class="hljs-keyword">null</span> auto_increment <span class="hljs-keyword">primary</span> key,			<span class="hljs-comment">-- 主键</span><br>    name <span class="hljs-type">varchar</span>(<span class="hljs-number">32</span>) <span class="hljs-keyword">not</span> <span class="hljs-keyword">null</span><br>);<br><br><span class="hljs-keyword">create</span> <span class="hljs-keyword">table</span> TableName (<br>    id <span class="hljs-type">int</span> <span class="hljs-keyword">not</span> <span class="hljs-keyword">null</span> auto_increment,<br>    name <span class="hljs-type">varchar</span>(<span class="hljs-number">32</span>) <span class="hljs-keyword">not</span> <span class="hljs-keyword">null</span>,<br>	<span class="hljs-keyword">primary</span> key(id)<br>);<br>    <br><span class="hljs-keyword">create</span> <span class="hljs-keyword">table</span> TableName (<br>	id <span class="hljs-type">int</span> <span class="hljs-keyword">not</span> <span class="hljs-keyword">null</span> auto_increment,<br>    name <span class="hljs-type">varchar</span>(<span class="hljs-number">32</span>) <span class="hljs-keyword">not</span> <span class="hljs-keyword">null</span>,<br>    <span class="hljs-keyword">primary</span> key(列<span class="hljs-number">1</span>，列<span class="hljs-number">2</span>)					<span class="hljs-comment">-- 若有多列，称为联合主键(MyISAM引擎支持，不常用)</span><br>);<br><br><span class="hljs-comment">-- 也可以给已有的表 增加/删除 索引</span><br><span class="hljs-keyword">alter</span> <span class="hljs-keyword">table</span> 表名 <span class="hljs-keyword">add</span> <span class="hljs-keyword">primary</span> key(列名);<br><br><span class="hljs-keyword">alter</span> <span class="hljs-keyword">table</span> 表名 <span class="hljs-keyword">drop</span> <span class="hljs-keyword">primary</span> key;<br><br><span class="hljs-comment">-- 删除索引时可能会报错，如：自增列必须定义为键。</span><br><span class="hljs-keyword">alter</span> <span class="hljs-keyword">table</span> 表 change id id <span class="hljs-type">int</span> <span class="hljs-keyword">not</span> <span class="hljs-keyword">null</span>;		<span class="hljs-comment">-- 令字段属性不再自增</span><br></code></pre></td></tr></table></figure>
+
+
+
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><code class="hljs sql"><span class="hljs-comment">-- 唯一和联合唯一索引</span><br><span class="hljs-keyword">create</span> <span class="hljs-keyword">table</span> TableName (<br>	id <span class="hljs-type">int</span> <span class="hljs-keyword">not</span> <span class="hljs-keyword">null</span> auto_increment <span class="hljs-keyword">primary</span> key,<br>    name <span class="hljs-type">varchar</span>(<span class="hljs-number">32</span>) <span class="hljs-keyword">not</span> <span class="hljs-keyword">null</span>,<br>    email <span class="hljs-type">varchar</span>(<span class="hljs-number">64</span>) <span class="hljs-keyword">not</span> <span class="hljs-keyword">null</span>,<br>    <span class="hljs-keyword">unique</span> ix_name (name)		<span class="hljs-comment">-- 单列，唯一索引</span><br>    <span class="hljs-keyword">unique</span> ix_email (email)<br>);<br><br><span class="hljs-keyword">create</span> <span class="hljs-keyword">table</span> TableName (<br>	id <span class="hljs-type">int</span> <span class="hljs-keyword">not</span> <span class="hljs-keyword">null</span> auto_increment,<br>    name <span class="hljs-type">varchar</span>(<span class="hljs-number">32</span>) <span class="hljs-keyword">not</span> <span class="hljs-keyword">null</span>,<br>    <span class="hljs-keyword">unique</span> (列<span class="hljs-number">1</span>,列<span class="hljs-number">2</span>)				<span class="hljs-comment">-- 多列，称为联合唯一索引（允许某一列重复，但不能所有列都一样）</span><br>);<br><br><span class="hljs-comment">-- 给已有的表 增加/删除 索引</span><br><span class="hljs-keyword">create</span> <span class="hljs-keyword">unique</span> <span class="hljs-keyword">table</span> index 索引名 <span class="hljs-keyword">on</span> 表名(列名);<br><br><span class="hljs-keyword">drop</span> <span class="hljs-keyword">unique</span> index 索引名 <span class="hljs-keyword">on</span> 表名;<br></code></pre></td></tr></table></figure>
+
+
+
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><code class="hljs sql"><span class="hljs-comment">-- 索引和联合索引</span><br><span class="hljs-keyword">create</span> <span class="hljs-keyword">table</span> TableName (<br>	id <span class="hljs-type">int</span> <span class="hljs-keyword">not</span> <span class="hljs-keyword">null</span> auto_increment <span class="hljs-keyword">primary</span> key,<br>    name <span class="hljs-type">varchar</span>(<span class="hljs-number">32</span>) <span class="hljs-keyword">not</span> <span class="hljs-keyword">null</span>,<br>    email <span class="hljs-type">varchar</span>(<span class="hljs-number">64</span>) <span class="hljs-keyword">not</span> <span class="hljs-keyword">null</span>,<br>    index ix_email (email)<br>    index ix_name (name)<br>);<br><br><span class="hljs-keyword">create</span> <span class="hljs-keyword">table</span> TableName (<br>	id <span class="hljs-type">int</span> <span class="hljs-keyword">not</span> <span class="hljs-keyword">null</span> auto_increment <span class="hljs-keyword">primary</span> key,<br>    name <span class="hljs-type">varchar</span>(<span class="hljs-number">32</span>) <span class="hljs-keyword">not</span> <span class="hljs-keyword">null</span>,<br>    email <span class="hljs-type">varchar</span>(<span class="hljs-number">64</span>) <span class="hljs-keyword">not</span> <span class="hljs-keyword">null</span>,<br>    index ix_email (name,email)		<span class="hljs-comment">-- 多列，称为联合索引。</span><br>);<br><br><span class="hljs-comment">-- 给已有的表 增加/删除 索引</span><br><span class="hljs-keyword">create</span> index 索引名 <span class="hljs-keyword">on</span> 表名(列名);<br><br><span class="hljs-keyword">drop</span> index 索引名 <span class="hljs-keyword">on</span> 表名;<br></code></pre></td></tr></table></figure>
+
+<ul>
+<li>注意事项</li>
+</ul>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><code class="hljs sql"><span class="hljs-comment">-- 一般情况下，针对索引列的搜索都可以命中索引（通过索引结构加速查找）</span><br><span class="hljs-keyword">select</span> <span class="hljs-operator">*</span> <span class="hljs-keyword">from</span> big <span class="hljs-keyword">where</span> id <span class="hljs-operator">=</span> <span class="hljs-number">5</span>;<br><span class="hljs-keyword">select</span> <span class="hljs-operator">*</span> <span class="hljs-keyword">from</span> big <span class="hljs-keyword">where</span> email <span class="hljs-operator">=</span> &quot;2734306201@qq.com&quot;;<br><br><span class="hljs-comment">-- 无法命中索引的情况（除了主键，大多数情况下，主键都可命中索引）</span><br><br><span class="hljs-comment">-- 1、类型不一致</span><br><span class="hljs-keyword">select</span> <span class="hljs-operator">*</span> <span class="hljs-keyword">from</span> big <span class="hljs-keyword">where</span> name <span class="hljs-operator">=</span> <span class="hljs-number">123</span>;		<span class="hljs-comment">-- 未命中</span><br><br><span class="hljs-comment">-- 2、使用了不等于</span><br><span class="hljs-keyword">select</span> <span class="hljs-operator">*</span> <span class="hljs-keyword">from</span> big <span class="hljs-keyword">where</span> name <span class="hljs-operator">!=</span> &quot;zhangsan&quot;;		<span class="hljs-comment">-- 未命中</span><br><br><span class="hljs-keyword">select</span> <span class="hljs-operator">*</span> <span class="hljs-keyword">from</span> big <span class="hljs-keyword">where</span> id <span class="hljs-operator">!=</span> <span class="hljs-number">123</span>; 				<span class="hljs-comment">-- 特殊的主键，命中</span><br><br><span class="hljs-comment">-- 3、使用了 or，且 or 条件中有未建立索引的列</span><br><span class="hljs-keyword">select</span> <span class="hljs-operator">*</span> <span class="hljs-keyword">from</span> big <span class="hljs-keyword">where</span> id <span class="hljs-operator">=</span> <span class="hljs-number">123</span> <span class="hljs-keyword">or</span> password <span class="hljs-operator">=</span> &quot;xx&quot;;	<span class="hljs-comment">-- 未命中</span><br><br><span class="hljs-comment">-- 4、排序，当根据索引排序时，选择的映射如果不是索引，则不走索引</span><br><br><span class="hljs-comment">-- 5、like 进行模糊匹配时</span><br><br><span class="hljs-comment">-- 6、使用函数查询时</span><br><span class="hljs-keyword">select</span> <span class="hljs-operator">*</span> <span class="hljs-keyword">from</span> big <span class="hljs-keyword">where</span> reverse(name) <span class="hljs-operator">=</span> &quot;zhangsan&quot;;		<span class="hljs-comment">-- 未命中。但是先翻转再赋值则可以命中</span><br><span class="hljs-keyword">select</span> <span class="hljs-operator">*</span> <span class="hljs-keyword">from</span> big <span class="hljs-keyword">where</span> name <span class="hljs-operator">=</span> reverse(&quot;zhangsan&quot;);<br><br><span class="hljs-comment">-- 7、联合索引时遵循最左前缀原则。比如：联合索引 (name, password)</span><br>name <span class="hljs-keyword">and</span> password 	<span class="hljs-comment">-- 命中</span><br>name				<span class="hljs-comment">-- 命中</span><br>password			<span class="hljs-comment">-- 未命中</span><br>name <span class="hljs-keyword">or</span> password	<span class="hljs-comment">-- 未命中</span><br></code></pre></td></tr></table></figure>
+
+<h2 id="执行计划"><a href="#执行计划" class="headerlink" title="执行计划"></a>执行计划</h2><p><code>explain + SQL 语句;</code> 这段语句可以指定 SQL 的执行。有多种类型，性能排行：</p>
+<p><code>all &lt; index &lt; range &lt; index_merge &lt; ref_or_null &lt; ref &lt; eq_ref &lt; system/const</code></p>
+<ul>
+<li>ALL，全表扫描，数据表从头到尾找一遍，且一般不会命中索引：<code>select * from big;</code></li>
+<li>INDEX，全索引扫描，对索引从头到尾找一遍：<code>explain select id from big; </code></li>
+<li>RANGE，对索引列进行范围查找：<code>explain select * from big where id &gt; 10;</code></li>
+<li>INDEX_MERGE，合并索引，使用多个单列索引搜索：<code>explain select * from big where id = 10 or name = &quot;zhangsan&quot;;</code></li>
+<li>REF，根据索引直接查找（非键）：<code>select * from big where name = &#39;zhangsan&#39;</code>;</li>
+<li>EQ_REF，连表操作时常见：</li>
+</ul>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs sql">explain <span class="hljs-keyword">select</span> big.name, users.id <span class="hljs-keyword">from</span> big <span class="hljs-keyword">left</span> <span class="hljs-keyword">join</span> users <span class="hljs-keyword">on</span> big.age <span class="hljs-operator">=</span> users.id;<br></code></pre></td></tr></table></figure>
+
+<ul>
+<li>CONST，常量，表最多有一个匹配行，在这行的列值可被优化器剩余部分认为是常数，const表很快。</li>
+</ul>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs sql">explain <span class="hljs-keyword">select</span> <span class="hljs-operator">*</span> <span class="hljs-keyword">from</span> big <span class="hljs-keyword">where</span> id <span class="hljs-operator">=</span> <span class="hljs-number">11</span>;						<span class="hljs-comment">-- 主键</span><br>explain <span class="hljs-keyword">select</span> <span class="hljs-operator">*</span> <span class="hljs-keyword">from</span> big <span class="hljs-keyword">where</span> email <span class="hljs-operator">=</span> &quot;2734306201@qq.com&quot;;	<span class="hljs-comment">-- 唯一索引</span><br></code></pre></td></tr></table></figure>
+
+<ul>
+<li>SYSTEM，表仅有一行（系统表）。CONST 联接类型的一个特例。</li>
+</ul>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs sql">explain <span class="hljs-keyword">select</span> <span class="hljs-operator">*</span> <span class="hljs-keyword">from</span> (<span class="hljs-keyword">select</span> <span class="hljs-operator">*</span> <span class="hljs-keyword">from</span> big <span class="hljs-keyword">where</span> id <span class="hljs-operator">=</span> <span class="hljs-number">1</span> limit <span class="hljs-number">1</span>) <span class="hljs-keyword">as</span> A;<br></code></pre></td></tr></table></figure>
+
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/%E6%95%B0%E6%8D%AE%E5%BA%93/" class="category-chain-item">数据库</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/MySQL/">#MySQL</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>MySQL索引入门</div>
+      <div>http://example.com/2022/11/20/MySQL索引入门/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>John Doe</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2022年11月20日</div>
+        </div>
+      
+      
+      <div class="license-meta-item">
+        <div>许可协议</div>
+        <div>
+          
+            
+            
+              <a target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+              <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                <i class="iconfont icon-by"></i>
+              </span>
+              </a>
+            
+          
+        </div>
+      </div>
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2022/11/08/Go%E5%B8%B8%E8%A7%81%E5%85%B3%E9%94%AE%E5%AD%97%E7%9A%84%E5%BA%95%E5%B1%82/" title="Go常见关键字的底层">
+                        <span class="hidden-mobile">Go常见关键字的底层</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;目录</p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.0/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.18.2/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      headingSelector : CONFIG.toc.headingSelector || 'h1,h2,h3,h4,h5,h6',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      collapseDepth   : CONFIG.toc.collapseDepth || 0,
+      scrollSmooth    : true,
+      headingsOffset  : -boardTop
+    });
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.10/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>
